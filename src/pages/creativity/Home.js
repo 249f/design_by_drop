@@ -51,6 +51,9 @@ function Home() {
     const [activeScreen, setActiveScreen] = useState(savedState?.activeScreen || 'desktop');
     const [customSize, setCustomSize] = useState(savedState?.customSize || { width: 1200, height: 800 });
 
+    const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
+    const [alignmentLines, setAlignmentLines] = useState([]);
+
     // Store responsive styles per screen
     const [responsiveStyles, setResponsiveStyles] = useState(savedState?.responsiveStyles || {
         desktop: {},
@@ -286,10 +289,74 @@ function Home() {
         const handleMouseMove = (moveEvent) => {
             const dx = moveEvent.clientX - startX;
             const dy = moveEvent.clientY - startY;
-            updateElementForScreen(elementId, { x: startElX + dx, y: startElY + dy });
+            let newX = startElX + dx;
+            let newY = startElY + dy;
+
+            // Alignment calculations
+            const newAlignmentLines = [];
+            if (showAlignmentHelpers) {
+                const threshold = 5;
+                const center = newX + styles.width / 2;
+                const right = newX + styles.width;
+                const middle = newY + styles.height / 2;
+                const bottom = newY + styles.height;
+
+                elements.forEach(other => {
+                    if (other.id === elementId) return;
+                    const otherStyles = getElementStyles(other);
+                    const otherRight = otherStyles.x + otherStyles.width;
+                    const otherBottom = otherStyles.y + otherStyles.height;
+                    const otherCenter = otherStyles.x + otherStyles.width / 2;
+                    const otherMiddle = otherStyles.y + otherStyles.height / 2;
+
+                    // Vertical Alignment
+                    if (Math.abs(newX - otherStyles.x) < threshold) {
+                        newAlignmentLines.push({ type: 'v', x: otherStyles.x, y1: Math.min(newY, otherStyles.y), y2: Math.max(bottom, otherBottom) });
+                        newX = otherStyles.x;
+                    } else if (Math.abs(newX - otherRight) < threshold) {
+                        newAlignmentLines.push({ type: 'v', x: otherRight, y1: Math.min(newY, otherStyles.y), y2: Math.max(bottom, otherBottom) });
+                        newX = otherRight;
+                    } else if (Math.abs(center - otherCenter) < threshold) { // Center alignment
+                        newAlignmentLines.push({ type: 'v', x: otherCenter, y1: Math.min(newY, otherStyles.y), y2: Math.max(bottom, otherBottom) });
+                        newX = otherCenter - styles.width / 2;
+                    }
+
+                    if (Math.abs(right - otherStyles.x) < threshold) {
+                        newAlignmentLines.push({ type: 'v', x: otherStyles.x, y1: Math.min(newY, otherStyles.y), y2: Math.max(bottom, otherBottom) });
+                        newX = otherStyles.x - styles.width;
+                    } else if (Math.abs(right - otherRight) < threshold) {
+                        newAlignmentLines.push({ type: 'v', x: otherRight, y1: Math.min(newY, otherStyles.y), y2: Math.max(bottom, otherBottom) });
+                        newX = otherRight - styles.width;
+                    }
+
+                    // Horizontal Alignment
+                    if (Math.abs(newY - otherStyles.y) < threshold) {
+                        newAlignmentLines.push({ type: 'h', y: otherStyles.y, x1: Math.min(newX, otherStyles.x), x2: Math.max(right, otherRight) });
+                        newY = otherStyles.y;
+                    } else if (Math.abs(newY - otherBottom) < threshold) {
+                        newAlignmentLines.push({ type: 'h', y: otherBottom, x1: Math.min(newX, otherStyles.x), x2: Math.max(right, otherRight) });
+                        newY = otherBottom;
+                    } else if (Math.abs(middle - otherMiddle) < threshold) { // Middle alignment
+                        newAlignmentLines.push({ type: 'h', y: otherMiddle, x1: Math.min(newX, otherStyles.x), x2: Math.max(right, otherRight) });
+                        newY = otherMiddle - styles.height / 2;
+                    }
+
+                    if (Math.abs(bottom - otherStyles.y) < threshold) {
+                        newAlignmentLines.push({ type: 'h', y: otherStyles.y, x1: Math.min(newX, otherStyles.x), x2: Math.max(right, otherRight) });
+                        newY = otherStyles.y - styles.height;
+                    } else if (Math.abs(bottom - otherBottom) < threshold) {
+                        newAlignmentLines.push({ type: 'h', y: otherBottom, x1: Math.min(newX, otherStyles.x), x2: Math.max(right, otherRight) });
+                        newY = otherBottom - styles.height;
+                    }
+                });
+            }
+            setAlignmentLines(newAlignmentLines);
+
+            updateElementForScreen(elementId, { x: newX, y: newY });
         };
 
         const handleMouseUp = () => {
+            setAlignmentLines([]);
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };
@@ -539,6 +606,20 @@ function Home() {
                     </div>
                 </div>
 
+                {/* Global Settings */}
+                <div className="sidebar-section">
+                    <h2 className="sidebar-title">Settings</h2>
+                    <div className="checkbox-row">
+                        <input
+                            type="checkbox"
+                            id="showAlignmentHelpers"
+                            checked={showAlignmentHelpers}
+                            onChange={(e) => setShowAlignmentHelpers(e.target.checked)}
+                        />
+                        <label htmlFor="showAlignmentHelpers" className="checkbox-label">Alignment Helper</label>
+                    </div>
+                </div>
+
                 {/* Buttons */}
                 <div className="sidebar-section">
                     <h2 className="sidebar-title">Buttons</h2>
@@ -582,6 +663,29 @@ function Home() {
                                     onChange={(e) => updateElementProperty('content', e.target.value)}
                                     disabled={selectedElementData.locked}
                                 />
+                            </div>
+                        )}
+
+                        {/* Text Color Picker */}
+                        {(selectedElementData.type === 'text' || selectedElementData.type === 'button') && (
+                            <div className="property-group">
+                                <label>Text Color</label>
+                                <div className="color-input-row">
+                                    <input
+                                        type="color"
+                                        className="color-picker"
+                                        value={getElementStyles(selectedElementData).color || '#ffffff'}
+                                        onChange={(e) => updateElementProperty('color', e.target.value)}
+                                        disabled={selectedElementData.locked}
+                                    />
+                                    <input
+                                        type="text"
+                                        className="color-text-input"
+                                        value={getElementStyles(selectedElementData).color || '#ffffff'}
+                                        onChange={(e) => updateElementProperty('color', e.target.value)}
+                                        disabled={selectedElementData.locked}
+                                    />
+                                </div>
                             </div>
                         )}
 
@@ -807,6 +911,20 @@ function Home() {
                             </div>
                         )}
                         {elements.map(renderElement)}
+
+                        {/* Alignment Lines */}
+                        {alignmentLines.map((line, index) => (
+                            <div
+                                key={index}
+                                className="alignment-line"
+                                style={{
+                                    left: line.type === 'v' ? line.x : line.x1,
+                                    top: line.type === 'h' ? line.y : line.y1,
+                                    width: line.type === 'h' ? (line.x2 - line.x1) : 1,
+                                    height: line.type === 'v' ? (line.y2 - line.y1) : 1,
+                                }}
+                            />
+                        ))}
                     </div>
                 </div>
             </main>

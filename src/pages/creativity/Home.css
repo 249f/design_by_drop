@@ -723,6 +723,27 @@ button:disabled {
   transform: translateY(-50%) scale(1.2);
 }
 
+/* Alignment Helper Lines */
+.alignment-line {
+  position: absolute;
+  /* background-color: #ff00ff; */
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.8;
+}
+
+/* Horizontal lines */
+.alignment-line[style*="height: 1px"] {
+  border-top: 2px dashed #ff0000;
+  height: 0 !important;
+}
+
+/* Vertical lines */
+.alignment-line[style*="width: 1px"] {
+  border-left: 2px dashed #ff0000;
+  width: 0 !important;
+}
+
 /* Right Code Panel */
 .code-panel {
   width: 300px;

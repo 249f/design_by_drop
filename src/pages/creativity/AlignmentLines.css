@@ -1,0 +1,23 @@
+/* Alignment Helper Lines */
+.alignment-line {
+    position: absolute;
+    background-color: #ff00ff;
+    border-bottom: 2px dashed #ff00ff;
+    /* For horizontal lines */
+    border-left: 2px dashed #ff00ff;
+    /* For vertical lines */
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.8;
+}
+
+/* Adjust if using regular borders for clarity */
+.alignment-line[style*="height: 1px"] {
+    border-left: none;
+    border-bottom: 1px dashed #ff00ff;
+}
+
+.alignment-line[style*="width: 1px"] {
+    border-bottom: none;
+    border-right: 1px dashed #ff00ff;
+}
