@@ -1,11 +1,18 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Home } from './pages/creativity';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <Home />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/creativity/home" element={<Home />} />
+          <Route path="/" element={<Navigate to="/creativity/home" replace />} />
+          <Route path="*" element={<Navigate to="/creativity/home" replace />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

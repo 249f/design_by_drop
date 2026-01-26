@@ -9,12 +9,13 @@
 
 /* Left Sidebar */
 .sidebar {
-  width: 200px;
+  width: 220px;
   background: linear-gradient(180deg, #16213e 0%, #1a1a2e 100%);
   padding: 20px;
   border-right: 1px solid #2a2a4a;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .sidebar-title {
@@ -87,6 +88,103 @@
   content: 'T';
 }
 
+/* Properties Panel */
+.properties-panel {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #2a2a4a;
+}
+
+.panel-title {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #4fc3f7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.property-group {
+  margin-bottom: 18px;
+}
+
+.property-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.color-picker-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-picker {
+  -webkit-appearance: none;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+  border-radius: 50%;
+  border: 3px solid #2a2a4a;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.color-picker:hover::-webkit-color-swatch {
+  border-color: #4fc3f7;
+}
+
+.color-value {
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.85rem;
+  color: #a8e6cf;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.quick-colors {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.quick-color-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-color-btn:hover {
+  transform: scale(1.15);
+  border-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.size-info {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.85rem;
+  color: #81d4fa;
+}
+
 .element-actions {
   margin-top: auto;
   padding-top: 20px;
@@ -147,7 +245,7 @@
 .canvas-element {
   position: absolute;
   cursor: move;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.15s ease;
   user-select: none;
 }
 
@@ -168,7 +266,6 @@
 }
 
 .text-content {
-  color: #fff;
   font-size: 16px;
 }
 
@@ -178,6 +275,46 @@
 
 .canvas-element:hover:not(.selected) {
   box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.5);
+}
+
+/* Resize Handles */
+.resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #4fc3f7;
+  border: 2px solid #fff;
+  border-radius: 2px;
+  z-index: 10;
+}
+
+.resize-handle:hover {
+  background: #81d4fa;
+  transform: scale(1.2);
+}
+
+.resize-handle.nw {
+  top: -6px;
+  left: -6px;
+  cursor: nw-resize;
+}
+
+.resize-handle.ne {
+  top: -6px;
+  right: -6px;
+  cursor: ne-resize;
+}
+
+.resize-handle.sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: sw-resize;
+}
+
+.resize-handle.se {
+  bottom: -6px;
+  right: -6px;
+  cursor: se-resize;
 }
 
 /* Right Code Panel */
@@ -249,22 +386,26 @@
 
 /* Scrollbar Styles */
 .code-output::-webkit-scrollbar,
-.code-panel::-webkit-scrollbar {
+.code-panel::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
   width: 8px;
 }
 
 .code-output::-webkit-scrollbar-track,
-.code-panel::-webkit-scrollbar-track {
+.code-panel::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
   background: #1a1a2e;
 }
 
 .code-output::-webkit-scrollbar-thumb,
-.code-panel::-webkit-scrollbar-thumb {
+.code-panel::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
   background: #4fc3f7;
   border-radius: 4px;
 }
 
 .code-output::-webkit-scrollbar-thumb:hover,
-.code-panel::-webkit-scrollbar-thumb:hover {
+.code-panel::-webkit-scrollbar-thumb:hover,
+.sidebar::-webkit-scrollbar-thumb:hover {
   background: #81d4fa;
 }
