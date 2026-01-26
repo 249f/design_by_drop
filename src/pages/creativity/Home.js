@@ -9,13 +9,40 @@ const shapes = [
     { id: 'text', name: 'Text', type: 'text' },
 ];
 
+// Button components
+const buttons = [
+    { id: 'btn-primary', name: 'Primary', type: 'button', variant: 'primary' },
+    { id: 'btn-secondary', name: 'Secondary', type: 'button', variant: 'secondary' },
+    { id: 'btn-outline', name: 'Outline', type: 'button', variant: 'outline' },
+];
+
+// Screen presets
+const screenPresets = [
+    { id: 'desktop', name: 'Desktop', width: 1200, height: 800 },
+    { id: 'tablet', name: 'Tablet', width: 768, height: 1024 },
+    { id: 'mobile', name: 'Mobile', width: 375, height: 667 },
+    { id: 'custom', name: 'Custom', width: null, height: null },
+];
+
 function Home() {
     const [elements, setElements] = useState([]);
     const [selectedElement, setSelectedElement] = useState(null);
     const [draggedShape, setDraggedShape] = useState(null);
     const [isResizing, setIsResizing] = useState(false);
+    const [canvasBackground, setCanvasBackground] = useState('#1e1e2f');
+    const [activeScreen, setActiveScreen] = useState('desktop');
+    const [customSize, setCustomSize] = useState({ width: 1200, height: 800 });
     const canvasRef = useRef(null);
     const elementIdRef = useRef(1);
+
+    // Get current screen size
+    const getCurrentScreenSize = () => {
+        if (activeScreen === 'custom') return customSize;
+        const preset = screenPresets.find(s => s.id === activeScreen);
+        return { width: preset.width, height: preset.height };
+    };
+
+    const screenSize = getCurrentScreenSize();
 
     // Get selected element data
     const selectedElementData = elements.find(el => el.id === selectedElement);
@@ -26,11 +53,12 @@ function Home() {
 
         let html = '<div class="container">\n';
         elements.forEach((el) => {
-            const style = `left: ${el.x}px; top: ${el.y}px; width: ${el.width}px; height: ${el.height}px;`;
             if (el.type === 'text') {
-                html += `  <p class="element-${el.id}" style="${style}">${el.content || 'Text'}</p>\n`;
+                html += `  <p class="element-${el.id}">${el.content || 'Text'}</p>\n`;
+            } else if (el.type === 'button') {
+                html += `  <button class="element-${el.id} btn-${el.variant}">${el.content || 'Button'}</button>\n`;
             } else {
-                html += `  <div class="element-${el.id} shape-${el.type}" style="${style}"></div>\n`;
+                html += `  <div class="element-${el.id} shape-${el.type}"></div>\n`;
             }
         });
         html += '</div>';
@@ -39,7 +67,8 @@ function Home() {
 
     // Generate CSS code from elements
     const generateCSS = () => {
-        let css = `.container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n}\n\n`;
+        let css = `body {\n  background-color: ${canvasBackground};\n}\n\n`;
+        css += `.container {\n  position: relative;\n  width: ${screenSize.width}px;\n  height: ${screenSize.height}px;\n}\n\n`;
 
         elements.forEach((el) => {
             css += `.element-${el.id} {\n`;
@@ -51,13 +80,20 @@ function Home() {
 
             if (el.type === 'circle') {
                 css += `  border-radius: 50%;\n`;
-                css += `  background-color: ${el.backgroundColor || '#3498db'};\n`;
+                css += `  background-color: ${el.backgroundColor};\n`;
             } else if (el.type === 'rectangle' || el.type === 'square') {
-                css += `  background-color: ${el.backgroundColor || '#3498db'};\n`;
+                css += `  background-color: ${el.backgroundColor};\n`;
                 css += `  border-radius: 4px;\n`;
             } else if (el.type === 'text') {
-                css += `  color: ${el.color || '#333'};\n`;
+                css += `  color: ${el.color};\n`;
                 css += `  font-size: 16px;\n`;
+            } else if (el.type === 'button') {
+                css += `  background-color: ${el.backgroundColor};\n`;
+                css += `  color: ${el.color};\n`;
+                css += `  border: ${el.variant === 'outline' ? `2px solid ${el.backgroundColor}` : 'none'};\n`;
+                css += `  border-radius: 6px;\n`;
+                css += `  font-size: 14px;\n`;
+                css += `  cursor: pointer;\n`;
             }
             css += `}\n\n`;
         });
@@ -86,16 +122,35 @@ function Home() {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+        const getDefaultProps = () => {
+            switch (draggedShape.type) {
+                case 'button':
+                    return {
+                        width: 120,
+                        height: 40,
+                        backgroundColor: draggedShape.variant === 'primary' ? '#3498db' :
+                            draggedShape.variant === 'secondary' ? '#6c757d' : 'transparent',
+                        color: draggedShape.variant === 'outline' ? '#3498db' : '#ffffff',
+                        content: 'Button',
+                        variant: draggedShape.variant,
+                    };
+                case 'text':
+                    return { width: 100, height: 30, backgroundColor: 'transparent', color: '#ffffff', content: 'Text' };
+                case 'square':
+                case 'circle':
+                    return { width: 80, height: 80, backgroundColor: '#3498db', color: '#ffffff', content: '' };
+                default:
+                    return { width: 120, height: 80, backgroundColor: '#3498db', color: '#ffffff', content: '' };
+            }
+        };
+
+        const props = getDefaultProps();
         const newElement = {
             id: elementIdRef.current++,
             type: draggedShape.type,
-            x: x - 40,
-            y: y - 40,
-            width: draggedShape.type === 'square' || draggedShape.type === 'circle' ? 80 : 120,
-            height: draggedShape.type === 'text' ? 30 : 80,
-            backgroundColor: '#3498db',
-            color: '#ffffff',
-            content: draggedShape.type === 'text' ? 'Text' : '',
+            x: x - props.width / 2,
+            y: y - props.height / 2,
+            ...props,
         };
 
         setElements([...elements, newElement]);
@@ -225,7 +280,19 @@ function Home() {
         if (selectedElement) {
             setElements(prev => prev.map(el =>
                 el.id === selectedElement
-                    ? { ...el, backgroundColor: color, color: color }
+                    ? { ...el, backgroundColor: color, color: el.type === 'text' || el.type === 'button' ? color : el.color }
+                    : el
+            ));
+        }
+    };
+
+    // Update element size manually
+    const handleSizeChange = (dimension, value) => {
+        if (selectedElement) {
+            const numValue = parseInt(value) || 30;
+            setElements(prev => prev.map(el =>
+                el.id === selectedElement
+                    ? { ...el, [dimension]: Math.max(30, numValue) }
                     : el
             ));
         }
@@ -236,23 +303,85 @@ function Home() {
         navigator.clipboard.writeText(text);
     };
 
+    // Render element on canvas
+    const renderElement = (element) => {
+        const isButton = element.type === 'button';
+        const style = {
+            left: element.x,
+            top: element.y,
+            width: element.width,
+            height: element.height,
+            backgroundColor: element.type === 'text' ? 'transparent' :
+                (element.variant === 'outline' ? 'transparent' : element.backgroundColor),
+            color: element.color,
+            border: element.variant === 'outline' ? `2px solid ${element.backgroundColor}` : 'none',
+        };
+
+        return (
+            <div
+                key={element.id}
+                className={`canvas-element ${element.type} ${element.variant || ''} ${selectedElement === element.id ? 'selected' : ''}`}
+                style={style}
+                onClick={(e) => handleElementClick(e, element)}
+                onMouseDown={(e) => handleElementDrag(e, element.id)}
+            >
+                {element.type === 'text' && (
+                    <span className="text-content">{element.content}</span>
+                )}
+                {isButton && (
+                    <span className="button-content">{element.content}</span>
+                )}
+
+                {/* Resize Handles */}
+                {selectedElement === element.id && (
+                    <>
+                        <div className="resize-handle nw" onMouseDown={(e) => handleResize(e, element.id, 'nw')} />
+                        <div className="resize-handle ne" onMouseDown={(e) => handleResize(e, element.id, 'ne')} />
+                        <div className="resize-handle sw" onMouseDown={(e) => handleResize(e, element.id, 'sw')} />
+                        <div className="resize-handle se" onMouseDown={(e) => handleResize(e, element.id, 'se')} />
+                    </>
+                )}
+            </div>
+        );
+    };
+
     return (
         <div className="home-container">
-            {/* Left Sidebar - Shape Palette */}
+            {/* Left Sidebar */}
             <aside className="sidebar">
-                <h2 className="sidebar-title">Shapes</h2>
-                <div className="shapes-list">
-                    {shapes.map((shape) => (
-                        <div
-                            key={shape.id}
-                            className={`shape-item shape-item-${shape.type}`}
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, shape)}
-                        >
-                            <div className={`shape-preview ${shape.type}`}></div>
-                            <span>{shape.name}</span>
-                        </div>
-                    ))}
+                {/* Shapes */}
+                <div className="sidebar-section">
+                    <h2 className="sidebar-title">Shapes</h2>
+                    <div className="shapes-list">
+                        {shapes.map((shape) => (
+                            <div
+                                key={shape.id}
+                                className="shape-item"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, shape)}
+                            >
+                                <div className={`shape-preview ${shape.type}`}></div>
+                                <span>{shape.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Buttons */}
+                <div className="sidebar-section">
+                    <h2 className="sidebar-title">Buttons</h2>
+                    <div className="shapes-list">
+                        {buttons.map((btn) => (
+                            <div
+                                key={btn.id}
+                                className="shape-item"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, btn)}
+                            >
+                                <div className={`button-preview ${btn.variant}`}>{btn.name}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Properties Panel */}
@@ -263,16 +392,20 @@ function Home() {
                         {/* Color Picker */}
                         <div className="property-group">
                             <label>Color</label>
-                            <div className="color-picker-wrapper">
+                            <div className="color-input-row">
                                 <input
                                     type="color"
                                     className="color-picker"
                                     value={selectedElementData.backgroundColor || '#3498db'}
                                     onChange={(e) => handleColorChange(e.target.value)}
                                 />
-                                <span className="color-value">
-                                    {selectedElementData.backgroundColor || '#3498db'}
-                                </span>
+                                <input
+                                    type="text"
+                                    className="color-text-input"
+                                    value={selectedElementData.backgroundColor || '#3498db'}
+                                    onChange={(e) => handleColorChange(e.target.value)}
+                                    placeholder="#3498db"
+                                />
                             </div>
                         </div>
 
@@ -291,11 +424,29 @@ function Home() {
                             </div>
                         </div>
 
-                        {/* Size Info */}
+                        {/* Size Inputs */}
                         <div className="property-group">
                             <label>Size</label>
-                            <div className="size-info">
-                                <span>{Math.round(selectedElementData.width)} × {Math.round(selectedElementData.height)}</span>
+                            <div className="size-inputs">
+                                <div className="size-input-group">
+                                    <span>W</span>
+                                    <input
+                                        type="number"
+                                        value={Math.round(selectedElementData.width)}
+                                        onChange={(e) => handleSizeChange('width', e.target.value)}
+                                        min="30"
+                                    />
+                                </div>
+                                <span className="size-separator">×</span>
+                                <div className="size-input-group">
+                                    <span>H</span>
+                                    <input
+                                        type="number"
+                                        value={Math.round(selectedElementData.height)}
+                                        onChange={(e) => handleSizeChange('height', e.target.value)}
+                                        min="30"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -310,61 +461,81 @@ function Home() {
                 )}
             </aside>
 
-            {/* Main Canvas */}
+            {/* Main Canvas Area */}
             <main className="canvas-container">
-                <div
-                    ref={canvasRef}
-                    className="canvas"
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
-                    onClick={handleCanvasClick}
-                >
-                    {elements.length === 0 && (
-                        <div className="canvas-placeholder">
-                            Drag and drop shapes here
+                {/* Toolbar */}
+                <div className="canvas-toolbar">
+                    {/* Screen Size Presets */}
+                    <div className="screen-presets">
+                        {screenPresets.map(preset => (
+                            <button
+                                key={preset.id}
+                                className={`preset-btn ${activeScreen === preset.id ? 'active' : ''}`}
+                                onClick={() => setActiveScreen(preset.id)}
+                            >
+                                {preset.name}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Custom Size Inputs */}
+                    {activeScreen === 'custom' && (
+                        <div className="custom-size-inputs">
+                            <input
+                                type="number"
+                                value={customSize.width}
+                                onChange={(e) => setCustomSize(prev => ({ ...prev, width: parseInt(e.target.value) || 800 }))}
+                                min="320"
+                            />
+                            <span>×</span>
+                            <input
+                                type="number"
+                                value={customSize.height}
+                                onChange={(e) => setCustomSize(prev => ({ ...prev, height: parseInt(e.target.value) || 600 }))}
+                                min="320"
+                            />
                         </div>
                     )}
-                    {elements.map((element) => (
-                        <div
-                            key={element.id}
-                            className={`canvas-element ${element.type} ${selectedElement === element.id ? 'selected' : ''}`}
-                            style={{
-                                left: element.x,
-                                top: element.y,
-                                width: element.width,
-                                height: element.height,
-                                backgroundColor: element.type !== 'text' ? element.backgroundColor : 'transparent',
-                            }}
-                            onClick={(e) => handleElementClick(e, element)}
-                            onMouseDown={(e) => handleElementDrag(e, element.id)}
-                        >
-                            {element.type === 'text' && (
-                                <span className="text-content" style={{ color: element.color }}>{element.content}</span>
-                            )}
 
-                            {/* Resize Handles */}
-                            {selectedElement === element.id && (
-                                <>
-                                    <div
-                                        className="resize-handle nw"
-                                        onMouseDown={(e) => handleResize(e, element.id, 'nw')}
-                                    />
-                                    <div
-                                        className="resize-handle ne"
-                                        onMouseDown={(e) => handleResize(e, element.id, 'ne')}
-                                    />
-                                    <div
-                                        className="resize-handle sw"
-                                        onMouseDown={(e) => handleResize(e, element.id, 'sw')}
-                                    />
-                                    <div
-                                        className="resize-handle se"
-                                        onMouseDown={(e) => handleResize(e, element.id, 'se')}
-                                    />
-                                </>
-                            )}
-                        </div>
-                    ))}
+                    {/* Background Color */}
+                    <div className="bg-color-control">
+                        <label>Background:</label>
+                        <input
+                            type="color"
+                            value={canvasBackground}
+                            onChange={(e) => setCanvasBackground(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            className="bg-color-text"
+                            value={canvasBackground}
+                            onChange={(e) => setCanvasBackground(e.target.value)}
+                            placeholder="#1e1e2f"
+                        />
+                    </div>
+                </div>
+
+                {/* Canvas */}
+                <div className="canvas-wrapper">
+                    <div
+                        ref={canvasRef}
+                        className="canvas"
+                        style={{
+                            width: screenSize.width,
+                            height: screenSize.height,
+                            backgroundColor: canvasBackground
+                        }}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        onClick={handleCanvasClick}
+                    >
+                        {elements.length === 0 && (
+                            <div className="canvas-placeholder">
+                                Drag and drop shapes here
+                            </div>
+                        )}
+                        {elements.map(renderElement)}
+                    </div>
                 </div>
             </main>
 
