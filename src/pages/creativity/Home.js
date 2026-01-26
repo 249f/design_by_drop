@@ -87,14 +87,14 @@ function Home() {
     const selectedElementData = elements.find(el => el.id === selectedElement);
 
     // Get element styles for current screen (with responsive overrides)
-    const getElementStyles = (element) => {
+    const getElementStyles = useCallback((element) => {
         const baseStyles = { ...element };
         const screenOverrides = responsiveStyles[activeScreen]?.[element.id] || {};
         return { ...baseStyles, ...screenOverrides };
-    };
+    }, [responsiveStyles, activeScreen]);
 
     // Update element style for current screen
-    const updateElementForScreen = (elementId, updates) => {
+    const updateElementForScreen = useCallback((elementId, updates) => {
         if (activeScreen === 'desktop') {
             // Desktop is the base, update element directly
             setElements(prev => prev.map(el =>
@@ -113,7 +113,7 @@ function Home() {
                 }
             }));
         }
-    };
+    }, [activeScreen, setElements, setResponsiveStyles]);
 
     // Generate HTML code from elements
     const generateHTML = () => {
@@ -365,7 +365,7 @@ function Home() {
 
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
-    }, [elements, activeScreen, responsiveStyles]);
+    }, [elements, getElementStyles, updateElementForScreen]);
 
     // Handle canvas click to deselect
     const handleCanvasClick = () => {
