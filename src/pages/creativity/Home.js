@@ -326,22 +326,22 @@ function Home() {
 
             switch (corner) {
                 case 'se':
-                    newWidth = Math.max(30, startWidth + dx);
-                    newHeight = Math.max(30, startHeight + dy);
+                    newWidth = startWidth + dx;
+                    newHeight = startHeight + dy;
                     break;
                 case 'sw':
-                    newWidth = Math.max(30, startWidth - dx);
-                    newHeight = Math.max(30, startHeight + dy);
+                    newWidth = startWidth - dx;
+                    newHeight = startHeight + dy;
                     newX = startElX + (startWidth - newWidth);
                     break;
                 case 'ne':
-                    newWidth = Math.max(30, startWidth + dx);
-                    newHeight = Math.max(30, startHeight - dy);
+                    newWidth = startWidth + dx;
+                    newHeight = startHeight - dy;
                     newY = startElY + (startHeight - newHeight);
                     break;
                 case 'nw':
-                    newWidth = Math.max(30, startWidth - dx);
-                    newHeight = Math.max(30, startHeight - dy);
+                    newWidth = startWidth - dx;
+                    newHeight = startHeight - dy;
                     newX = startElX + (startWidth - newWidth);
                     newY = startElY + (startHeight - newHeight);
                     break;
@@ -422,8 +422,8 @@ function Home() {
             const element = elements.find(el => el.id === selectedElement);
             if (element?.locked) return;
 
-            const numValue = parseInt(value) || 30;
-            updateElementForScreen(selectedElement, { [dimension]: Math.max(30, numValue) });
+            const numValue = parseInt(value) || 0;
+            updateElementForScreen(selectedElement, { [dimension]: numValue });
         }
     };
 
@@ -479,7 +479,7 @@ function Home() {
 
                 {/* Lock indicator */}
                 {element.locked && (
-                    <div className="lock-indicator">🔒</div>
+                    <div className="lock-indicator"></div>
                 )}
 
                 {/* Resize Handles */}
@@ -545,7 +545,7 @@ function Home() {
                                 className={`lock-btn ${selectedElementData.locked ? 'locked' : ''}`}
                                 onClick={handleToggleLock}
                             >
-                                {selectedElementData.locked ? '🔒 Unlock Element' : '🔓 Lock Element'}
+                                {selectedElementData.locked ? ' Unlock Element' : ' Lock Element'}
                             </button>
                         </div>
 
@@ -647,7 +647,6 @@ function Home() {
                                         type="number"
                                         value={Math.round(getElementStyles(selectedElementData).width)}
                                         onChange={(e) => handleSizeChange('width', e.target.value)}
-                                        min="30"
                                         disabled={selectedElementData.locked}
                                     />
                                 </div>
@@ -658,7 +657,6 @@ function Home() {
                                         type="number"
                                         value={Math.round(getElementStyles(selectedElementData).height)}
                                         onChange={(e) => handleSizeChange('height', e.target.value)}
-                                        min="30"
                                         disabled={selectedElementData.locked}
                                     />
                                 </div>
@@ -701,7 +699,7 @@ function Home() {
                     {/* Responsive indicator */}
                     {activeScreen !== 'desktop' && activeScreen !== 'custom' && (
                         <span className="responsive-indicator">
-                            📱 Editing {activeScreen} styles
+                            Editing {activeScreen} styles
                         </span>
                     )}
 
@@ -712,14 +710,12 @@ function Home() {
                                 type="number"
                                 value={customSize.width}
                                 onChange={(e) => setCustomSize(prev => ({ ...prev, width: parseInt(e.target.value) || 800 }))}
-                                min="320"
                             />
                             <span>×</span>
                             <input
                                 type="number"
                                 value={customSize.height}
                                 onChange={(e) => setCustomSize(prev => ({ ...prev, height: parseInt(e.target.value) || 600 }))}
-                                min="320"
                             />
                         </div>
                     )}
