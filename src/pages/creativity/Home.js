@@ -345,6 +345,20 @@ function Home() {
                     newX = startElX + (startWidth - newWidth);
                     newY = startElY + (startHeight - newHeight);
                     break;
+                case 'n':
+                    newHeight = startHeight - dy;
+                    newY = startElY + (startHeight - newHeight);
+                    break;
+                case 's':
+                    newHeight = startHeight + dy;
+                    break;
+                case 'e':
+                    newWidth = startWidth + dx;
+                    break;
+                case 'w':
+                    newWidth = startWidth - dx;
+                    newX = startElX + (startWidth - newWidth);
+                    break;
                 default:
                     break;
             }
@@ -489,6 +503,14 @@ function Home() {
                         <div className="resize-handle ne" onMouseDown={(e) => handleResize(e, element.id, 'ne')} />
                         <div className="resize-handle sw" onMouseDown={(e) => handleResize(e, element.id, 'sw')} />
                         <div className="resize-handle se" onMouseDown={(e) => handleResize(e, element.id, 'se')} />
+                        {element.useEightJoints && (
+                            <>
+                                <div className="resize-handle n" onMouseDown={(e) => handleResize(e, element.id, 'n')} />
+                                <div className="resize-handle s" onMouseDown={(e) => handleResize(e, element.id, 's')} />
+                                <div className="resize-handle e" onMouseDown={(e) => handleResize(e, element.id, 'e')} />
+                                <div className="resize-handle w" onMouseDown={(e) => handleResize(e, element.id, 'w')} />
+                            </>
+                        )}
                     </>
                 )}
             </div>
@@ -547,6 +569,34 @@ function Home() {
                             >
                                 {selectedElementData.locked ? ' Unlock Element' : ' Lock Element'}
                             </button>
+                        </div>
+
+                        {/* Text Content Editing */}
+                        {(selectedElementData.type === 'text' || selectedElementData.type === 'button') && (
+                            <div className="property-group">
+                                <label>Text Content</label>
+                                <input
+                                    type="text"
+                                    className="text-content-input"
+                                    value={selectedElementData.content || ''}
+                                    onChange={(e) => updateElementProperty('content', e.target.value)}
+                                    disabled={selectedElementData.locked}
+                                />
+                            </div>
+                        )}
+
+                        {/* 8-Point Resizing Toggle */}
+                        <div className="property-group">
+                            <div className="checkbox-row">
+                                <input
+                                    type="checkbox"
+                                    id="useEightJoints"
+                                    checked={selectedElementData.useEightJoints || false}
+                                    onChange={(e) => updateElementProperty('useEightJoints', e.target.checked)}
+                                    disabled={selectedElementData.locked}
+                                />
+                                <label htmlFor="useEightJoints" className="checkbox-label">Use 8 Resize Joints</label>
+                            </div>
                         </div>
 
                         {/* Color Picker */}
