@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
 
 // Basic shape components
@@ -18,22 +18,61 @@ const buttons = [
 
 // Screen presets
 const screenPresets = [
-    { id: 'desktop', name: 'Desktop', width: 1200, height: 800 },
-    { id: 'tablet', name: 'Tablet', width: 768, height: 1024 },
-    { id: 'mobile', name: 'Mobile', width: 375, height: 667 },
-    { id: 'custom', name: 'Custom', width: null, height: null },
+    { id: 'desktop', name: 'Desktop', width: 1200, height: 800, mediaQuery: '@media (min-width: 1024px)' },
+    { id: 'tablet', name: 'Tablet', width: 768, height: 1024, mediaQuery: '@media (min-width: 768px) and (max-width: 1023px)' },
+    { id: 'mobile', name: 'Mobile', width: 375, height: 667, mediaQuery: '@media (max-width: 767px)' },
+    { id: 'custom', name: 'Custom', width: null, height: null, mediaQuery: '' },
 ];
 
+// Local storage key
+const STORAGE_KEY = 'design_by_drop_workspace';
+
 function Home() {
-    const [elements, setElements] = useState([]);
+    // Load initial state from localStorage
+    const loadFromStorage = () => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                return JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error('Failed to load from localStorage:', e);
+        }
+        return null;
+    };
+
+    const savedState = loadFromStorage();
+
+    const [elements, setElements] = useState(savedState?.elements || []);
     const [selectedElement, setSelectedElement] = useState(null);
     const [draggedShape, setDraggedShape] = useState(null);
     const [isResizing, setIsResizing] = useState(false);
-    const [canvasBackground, setCanvasBackground] = useState('#1e1e2f');
-    const [activeScreen, setActiveScreen] = useState('desktop');
-    const [customSize, setCustomSize] = useState({ width: 1200, height: 800 });
+    const [canvasBackground, setCanvasBackground] = useState(savedState?.canvasBackground || '#1e1e2f');
+    const [activeScreen, setActiveScreen] = useState(savedState?.activeScreen || 'desktop');
+    const [customSize, setCustomSize] = useState(savedState?.customSize || { width: 1200, height: 800 });
+
+    // Store responsive styles per screen
+    const [responsiveStyles, setResponsiveStyles] = useState(savedState?.responsiveStyles || {
+        desktop: {},
+        tablet: {},
+        mobile: {},
+    });
+
     const canvasRef = useRef(null);
-    const elementIdRef = useRef(1);
+    const elementIdRef = useRef(savedState?.nextId || 1);
+
+    // Save to localStorage whenever state changes
+    useEffect(() => {
+        const stateToSave = {
+            elements,
+            canvasBackground,
+            activeScreen,
+            customSize,
+            responsiveStyles,
+            nextId: elementIdRef.current,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+    }, [elements, canvasBackground, activeScreen, customSize, responsiveStyles]);
 
     // Get current screen size
     const getCurrentScreenSize = () => {
@@ -46,6 +85,35 @@ function Home() {
 
     // Get selected element data
     const selectedElementData = elements.find(el => el.id === selectedElement);
+
+    // Get element styles for current screen (with responsive overrides)
+    const getElementStyles = (element) => {
+        const baseStyles = { ...element };
+        const screenOverrides = responsiveStyles[activeScreen]?.[element.id] || {};
+        return { ...baseStyles, ...screenOverrides };
+    };
+
+    // Update element style for current screen
+    const updateElementForScreen = (elementId, updates) => {
+        if (activeScreen === 'desktop') {
+            // Desktop is the base, update element directly
+            setElements(prev => prev.map(el =>
+                el.id === elementId ? { ...el, ...updates } : el
+            ));
+        } else {
+            // Store responsive overrides
+            setResponsiveStyles(prev => ({
+                ...prev,
+                [activeScreen]: {
+                    ...prev[activeScreen],
+                    [elementId]: {
+                        ...prev[activeScreen]?.[elementId],
+                        ...updates,
+                    }
+                }
+            }));
+        }
+    };
 
     // Generate HTML code from elements
     const generateHTML = () => {
@@ -65,39 +133,72 @@ function Home() {
         return html;
     };
 
-    // Generate CSS code from elements
+    // Generate CSS code from elements with media queries
     const generateCSS = () => {
         let css = `body {\n  background-color: ${canvasBackground};\n}\n\n`;
-        css += `.container {\n  position: relative;\n  width: ${screenSize.width}px;\n  height: ${screenSize.height}px;\n}\n\n`;
+        css += `.container {\n  position: relative;\n  width: 100%;\n  max-width: ${screenSize.width}px;\n  min-height: ${screenSize.height}px;\n  margin: 0 auto;\n}\n\n`;
 
+        // Base styles (desktop)
         elements.forEach((el) => {
-            css += `.element-${el.id} {\n`;
-            css += `  position: absolute;\n`;
-            css += `  left: ${el.x}px;\n`;
-            css += `  top: ${el.y}px;\n`;
-            css += `  width: ${el.width}px;\n`;
-            css += `  height: ${el.height}px;\n`;
-
-            if (el.type === 'circle') {
-                css += `  border-radius: 50%;\n`;
-                css += `  background-color: ${el.backgroundColor};\n`;
-            } else if (el.type === 'rectangle' || el.type === 'square') {
-                css += `  background-color: ${el.backgroundColor};\n`;
-                css += `  border-radius: 4px;\n`;
-            } else if (el.type === 'text') {
-                css += `  color: ${el.color};\n`;
-                css += `  font-size: 16px;\n`;
-            } else if (el.type === 'button') {
-                css += `  background-color: ${el.backgroundColor};\n`;
-                css += `  color: ${el.color};\n`;
-                css += `  border: ${el.variant === 'outline' ? `2px solid ${el.backgroundColor}` : 'none'};\n`;
-                css += `  border-radius: 6px;\n`;
-                css += `  font-size: 14px;\n`;
-                css += `  cursor: pointer;\n`;
-            }
-            css += `}\n\n`;
+            const styles = getElementStyles(el);
+            css += generateElementCSS(el.id, styles);
         });
 
+        // Media queries for tablet and mobile
+        ['tablet', 'mobile'].forEach(screen => {
+            const preset = screenPresets.find(s => s.id === screen);
+            const overrides = responsiveStyles[screen] || {};
+
+            if (Object.keys(overrides).length > 0) {
+                css += `\n${preset.mediaQuery} {\n`;
+                Object.entries(overrides).forEach(([elementId, styles]) => {
+                    const el = elements.find(e => e.id === parseInt(elementId));
+                    if (el) {
+                        css += generateElementCSS(el.id, { ...el, ...styles }, '  ');
+                    }
+                });
+                css += `}\n`;
+            }
+        });
+
+        return css;
+    };
+
+    // Generate CSS for a single element
+    const generateElementCSS = (id, el, indent = '') => {
+        let css = `${indent}.element-${id} {\n`;
+        css += `${indent}  position: absolute;\n`;
+        css += `${indent}  left: ${el.x}px;\n`;
+        css += `${indent}  top: ${el.y}px;\n`;
+        css += `${indent}  width: ${el.width}px;\n`;
+        css += `${indent}  height: ${el.height}px;\n`;
+
+        // Border styles
+        if (el.borderWidth && el.borderWidth > 0) {
+            css += `${indent}  border: ${el.borderWidth}px solid ${el.borderColor || '#000'};\n`;
+        }
+        if (el.borderRadius !== undefined) {
+            css += `${indent}  border-radius: ${el.borderRadius}px;\n`;
+        }
+
+        if (el.type === 'circle') {
+            css += `${indent}  border-radius: 50%;\n`;
+            css += `${indent}  background-color: ${el.backgroundColor};\n`;
+        } else if (el.type === 'rectangle' || el.type === 'square') {
+            css += `${indent}  background-color: ${el.backgroundColor};\n`;
+        } else if (el.type === 'text') {
+            css += `${indent}  color: ${el.color};\n`;
+            css += `${indent}  font-size: 16px;\n`;
+        } else if (el.type === 'button') {
+            css += `${indent}  background-color: ${el.backgroundColor};\n`;
+            css += `${indent}  color: ${el.color};\n`;
+            if (el.variant === 'outline') {
+                css += `${indent}  border: 2px solid ${el.backgroundColor};\n`;
+                css += `${indent}  background-color: transparent;\n`;
+            }
+            css += `${indent}  cursor: pointer;\n`;
+        }
+        css += `${indent}}\n\n`;
         return css;
     };
 
@@ -150,6 +251,10 @@ function Home() {
             type: draggedShape.type,
             x: x - props.width / 2,
             y: y - props.height / 2,
+            borderRadius: draggedShape.type === 'circle' ? 50 : 4,
+            borderWidth: 0,
+            borderColor: '#000000',
+            locked: false,
             ...props,
         };
 
@@ -168,24 +273,20 @@ function Home() {
 
     // Handle element drag within canvas
     const handleElementDrag = (e, elementId) => {
-        if (isResizing || !canvasRef.current) return;
+        const element = elements.find(el => el.id === elementId);
+        if (isResizing || !canvasRef.current || element?.locked) return;
 
         e.preventDefault();
         const startX = e.clientX;
         const startY = e.clientY;
-        const element = elements.find(el => el.id === elementId);
-        const startElX = element.x;
-        const startElY = element.y;
+        const styles = getElementStyles(element);
+        const startElX = styles.x;
+        const startElY = styles.y;
 
         const handleMouseMove = (moveEvent) => {
             const dx = moveEvent.clientX - startX;
             const dy = moveEvent.clientY - startY;
-
-            setElements(prev => prev.map(el =>
-                el.id === elementId
-                    ? { ...el, x: startElX + dx, y: startElY + dy }
-                    : el
-            ));
+            updateElementForScreen(elementId, { x: startElX + dx, y: startElY + dy });
         };
 
         const handleMouseUp = () => {
@@ -199,17 +300,20 @@ function Home() {
 
     // Handle resize
     const handleResize = useCallback((e, elementId, corner) => {
+        const element = elements.find(el => el.id === elementId);
+        if (element?.locked) return;
+
         e.stopPropagation();
         e.preventDefault();
         setIsResizing(true);
 
         const startX = e.clientX;
         const startY = e.clientY;
-        const element = elements.find(el => el.id === elementId);
-        const startWidth = element.width;
-        const startHeight = element.height;
-        const startElX = element.x;
-        const startElY = element.y;
+        const styles = getElementStyles(element);
+        const startWidth = styles.width;
+        const startHeight = styles.height;
+        const startElX = styles.x;
+        const startElY = styles.y;
 
         const handleMouseMove = (moveEvent) => {
             const dx = moveEvent.clientX - startX;
@@ -245,11 +349,12 @@ function Home() {
                     break;
             }
 
-            setElements(prev => prev.map(el =>
-                el.id === elementId
-                    ? { ...el, width: newWidth, height: newHeight, x: newX, y: newY }
-                    : el
-            ));
+            updateElementForScreen(elementId, {
+                width: newWidth,
+                height: newHeight,
+                x: newX,
+                y: newY
+            });
         };
 
         const handleMouseUp = () => {
@@ -260,7 +365,7 @@ function Home() {
 
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
-    }, [elements]);
+    }, [elements, activeScreen, responsiveStyles]);
 
     // Handle canvas click to deselect
     const handleCanvasClick = () => {
@@ -271,30 +376,54 @@ function Home() {
     const handleDeleteSelected = () => {
         if (selectedElement) {
             setElements(elements.filter(el => el.id !== selectedElement));
+            // Also clean up responsive styles
+            setResponsiveStyles(prev => {
+                const newStyles = { ...prev };
+                Object.keys(newStyles).forEach(screen => {
+                    if (newStyles[screen][selectedElement]) {
+                        delete newStyles[screen][selectedElement];
+                    }
+                });
+                return newStyles;
+            });
             setSelectedElement(null);
         }
     };
 
-    // Update element color
-    const handleColorChange = (color) => {
+    // Toggle element lock
+    const handleToggleLock = () => {
         if (selectedElement) {
             setElements(prev => prev.map(el =>
-                el.id === selectedElement
-                    ? { ...el, backgroundColor: color, color: el.type === 'text' || el.type === 'button' ? color : el.color }
-                    : el
+                el.id === selectedElement ? { ...el, locked: !el.locked } : el
             ));
+        }
+    };
+
+    // Update element property
+    const updateElementProperty = (property, value) => {
+        if (selectedElement) {
+            const element = elements.find(el => el.id === selectedElement);
+            if (element?.locked && property !== 'locked') return;
+
+            if (property === 'backgroundColor' || property === 'color') {
+                updateElementForScreen(selectedElement, { [property]: value });
+            } else {
+                // Base properties update directly
+                setElements(prev => prev.map(el =>
+                    el.id === selectedElement ? { ...el, [property]: value } : el
+                ));
+            }
         }
     };
 
     // Update element size manually
     const handleSizeChange = (dimension, value) => {
         if (selectedElement) {
+            const element = elements.find(el => el.id === selectedElement);
+            if (element?.locked) return;
+
             const numValue = parseInt(value) || 30;
-            setElements(prev => prev.map(el =>
-                el.id === selectedElement
-                    ? { ...el, [dimension]: Math.max(30, numValue) }
-                    : el
-            ));
+            updateElementForScreen(selectedElement, { [dimension]: Math.max(30, numValue) });
         }
     };
 
@@ -303,27 +432,43 @@ function Home() {
         navigator.clipboard.writeText(text);
     };
 
+    // Clear workspace
+    const clearWorkspace = () => {
+        if (window.confirm('Are you sure you want to clear the workspace?')) {
+            setElements([]);
+            setResponsiveStyles({ desktop: {}, tablet: {}, mobile: {} });
+            setSelectedElement(null);
+            elementIdRef.current = 1;
+        }
+    };
+
     // Render element on canvas
     const renderElement = (element) => {
+        const styles = getElementStyles(element);
         const isButton = element.type === 'button';
+
         const style = {
-            left: element.x,
-            top: element.y,
-            width: element.width,
-            height: element.height,
+            left: styles.x,
+            top: styles.y,
+            width: styles.width,
+            height: styles.height,
             backgroundColor: element.type === 'text' ? 'transparent' :
-                (element.variant === 'outline' ? 'transparent' : element.backgroundColor),
-            color: element.color,
-            border: element.variant === 'outline' ? `2px solid ${element.backgroundColor}` : 'none',
+                (element.variant === 'outline' ? 'transparent' : styles.backgroundColor),
+            color: styles.color,
+            border: element.variant === 'outline'
+                ? `2px solid ${styles.backgroundColor}`
+                : (styles.borderWidth > 0 ? `${styles.borderWidth}px solid ${styles.borderColor}` : 'none'),
+            borderRadius: element.type === 'circle' ? '50%' : `${styles.borderRadius || 0}px`,
+            opacity: element.locked ? 0.7 : 1,
         };
 
         return (
             <div
                 key={element.id}
-                className={`canvas-element ${element.type} ${element.variant || ''} ${selectedElement === element.id ? 'selected' : ''}`}
+                className={`canvas-element ${element.type} ${element.variant || ''} ${selectedElement === element.id ? 'selected' : ''} ${element.locked ? 'locked' : ''}`}
                 style={style}
                 onClick={(e) => handleElementClick(e, element)}
-                onMouseDown={(e) => handleElementDrag(e, element.id)}
+                onMouseDown={(e) => !element.locked && handleElementDrag(e, element.id)}
             >
                 {element.type === 'text' && (
                     <span className="text-content">{element.content}</span>
@@ -332,8 +477,13 @@ function Home() {
                     <span className="button-content">{element.content}</span>
                 )}
 
+                {/* Lock indicator */}
+                {element.locked && (
+                    <div className="lock-indicator">🔒</div>
+                )}
+
                 {/* Resize Handles */}
-                {selectedElement === element.id && (
+                {selectedElement === element.id && !element.locked && (
                     <>
                         <div className="resize-handle nw" onMouseDown={(e) => handleResize(e, element.id, 'nw')} />
                         <div className="resize-handle ne" onMouseDown={(e) => handleResize(e, element.id, 'ne')} />
@@ -389,22 +539,33 @@ function Home() {
                     <div className="properties-panel">
                         <h3 className="panel-title">Properties</h3>
 
+                        {/* Lock Toggle */}
+                        <div className="property-group">
+                            <button
+                                className={`lock-btn ${selectedElementData.locked ? 'locked' : ''}`}
+                                onClick={handleToggleLock}
+                            >
+                                {selectedElementData.locked ? '🔒 Unlock Element' : '🔓 Lock Element'}
+                            </button>
+                        </div>
+
                         {/* Color Picker */}
                         <div className="property-group">
-                            <label>Color</label>
+                            <label>Fill Color</label>
                             <div className="color-input-row">
                                 <input
                                     type="color"
                                     className="color-picker"
-                                    value={selectedElementData.backgroundColor || '#3498db'}
-                                    onChange={(e) => handleColorChange(e.target.value)}
+                                    value={getElementStyles(selectedElementData).backgroundColor || '#3498db'}
+                                    onChange={(e) => updateElementProperty('backgroundColor', e.target.value)}
+                                    disabled={selectedElementData.locked}
                                 />
                                 <input
                                     type="text"
                                     className="color-text-input"
-                                    value={selectedElementData.backgroundColor || '#3498db'}
-                                    onChange={(e) => handleColorChange(e.target.value)}
-                                    placeholder="#3498db"
+                                    value={getElementStyles(selectedElementData).backgroundColor || '#3498db'}
+                                    onChange={(e) => updateElementProperty('backgroundColor', e.target.value)}
+                                    disabled={selectedElementData.locked}
                                 />
                             </div>
                         </div>
@@ -418,9 +579,61 @@ function Home() {
                                         key={color}
                                         className="quick-color-btn"
                                         style={{ backgroundColor: color }}
-                                        onClick={() => handleColorChange(color)}
+                                        onClick={() => !selectedElementData.locked && updateElementProperty('backgroundColor', color)}
+                                        disabled={selectedElementData.locked}
                                     />
                                 ))}
+                            </div>
+                        </div>
+
+                        {/* Border Controls */}
+                        <div className="property-group">
+                            <label>Border Radius</label>
+                            <div className="slider-input">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={selectedElementData.borderRadius || 0}
+                                    onChange={(e) => updateElementProperty('borderRadius', parseInt(e.target.value))}
+                                    disabled={selectedElementData.locked || selectedElementData.type === 'circle'}
+                                />
+                                <span>{selectedElementData.borderRadius || 0}px</span>
+                            </div>
+                        </div>
+
+                        <div className="property-group">
+                            <label>Border Width</label>
+                            <div className="slider-input">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="20"
+                                    value={selectedElementData.borderWidth || 0}
+                                    onChange={(e) => updateElementProperty('borderWidth', parseInt(e.target.value))}
+                                    disabled={selectedElementData.locked}
+                                />
+                                <span>{selectedElementData.borderWidth || 0}px</span>
+                            </div>
+                        </div>
+
+                        <div className="property-group">
+                            <label>Border Color</label>
+                            <div className="color-input-row">
+                                <input
+                                    type="color"
+                                    className="color-picker"
+                                    value={selectedElementData.borderColor || '#000000'}
+                                    onChange={(e) => updateElementProperty('borderColor', e.target.value)}
+                                    disabled={selectedElementData.locked}
+                                />
+                                <input
+                                    type="text"
+                                    className="color-text-input"
+                                    value={selectedElementData.borderColor || '#000000'}
+                                    onChange={(e) => updateElementProperty('borderColor', e.target.value)}
+                                    disabled={selectedElementData.locked}
+                                />
                             </div>
                         </div>
 
@@ -432,9 +645,10 @@ function Home() {
                                     <span>W</span>
                                     <input
                                         type="number"
-                                        value={Math.round(selectedElementData.width)}
+                                        value={Math.round(getElementStyles(selectedElementData).width)}
                                         onChange={(e) => handleSizeChange('width', e.target.value)}
                                         min="30"
+                                        disabled={selectedElementData.locked}
                                     />
                                 </div>
                                 <span className="size-separator">×</span>
@@ -442,9 +656,10 @@ function Home() {
                                     <span>H</span>
                                     <input
                                         type="number"
-                                        value={Math.round(selectedElementData.height)}
+                                        value={Math.round(getElementStyles(selectedElementData).height)}
                                         onChange={(e) => handleSizeChange('height', e.target.value)}
                                         min="30"
+                                        disabled={selectedElementData.locked}
                                     />
                                 </div>
                             </div>
@@ -452,13 +667,17 @@ function Home() {
                     </div>
                 )}
 
-                {selectedElement && (
-                    <div className="element-actions">
+                {/* Element Actions */}
+                <div className="element-actions">
+                    {selectedElement && (
                         <button className="delete-btn" onClick={handleDeleteSelected}>
                             Delete Selected
                         </button>
-                    </div>
-                )}
+                    )}
+                    <button className="clear-btn" onClick={clearWorkspace}>
+                        Clear Workspace
+                    </button>
+                </div>
             </aside>
 
             {/* Main Canvas Area */}
@@ -472,11 +691,19 @@ function Home() {
                                 key={preset.id}
                                 className={`preset-btn ${activeScreen === preset.id ? 'active' : ''}`}
                                 onClick={() => setActiveScreen(preset.id)}
+                                title={preset.mediaQuery || 'Custom size'}
                             >
                                 {preset.name}
                             </button>
                         ))}
                     </div>
+
+                    {/* Responsive indicator */}
+                    {activeScreen !== 'desktop' && activeScreen !== 'custom' && (
+                        <span className="responsive-indicator">
+                            📱 Editing {activeScreen} styles
+                        </span>
+                    )}
 
                     {/* Custom Size Inputs */}
                     {activeScreen === 'custom' && (
@@ -510,7 +737,6 @@ function Home() {
                             className="bg-color-text"
                             value={canvasBackground}
                             onChange={(e) => setCanvasBackground(e.target.value)}
-                            placeholder="#1e1e2f"
                         />
                     </div>
                 </div>

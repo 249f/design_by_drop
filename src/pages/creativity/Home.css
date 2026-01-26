@@ -287,6 +287,119 @@
   box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
 }
 
+.clear-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent-color);
+}
+
+/* Lock Button */
+.lock-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.lock-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.lock-btn.locked {
+  background: rgba(231, 76, 60, 0.2);
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+/* Slider Inputs */
+.slider-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-input input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 3px;
+  outline: none;
+}
+
+.slider-input input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.slider-input input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-input input[type="range"]:disabled {
+  opacity: 0.5;
+}
+
+.slider-input span {
+  min-width: 45px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-family: 'Fira Code', 'Consolas', monospace;
+}
+
+/* Lock Indicator on Canvas Element */
+.lock-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  pointer-events: none;
+}
+
+.canvas-element.locked {
+  cursor: not-allowed;
+}
+
+/* Responsive Indicator */
+.responsive-indicator {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Disabled inputs */
+input:disabled,
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Main Canvas Area */
 .canvas-container {
   flex: 1;
