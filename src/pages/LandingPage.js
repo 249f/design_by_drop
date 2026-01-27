@@ -13,7 +13,7 @@ const LandingPage = () => {
                     <a href="#about" className="lp-nav-link">About</a>
                     <a href="https://github.com/249f" className="lp-nav-link">GitHub</a>
                 </div>
-                <Link to="/creativity/home" className="lp-btn-primary">Launch App</Link>
+                <Link to="/creativity/home" className="lp-btn-primary">creativity Home</Link>
             </nav>
 
             {/* Hero Section */}
@@ -43,37 +43,37 @@ const LandingPage = () => {
 
                 <div className="lp-grid">
                     <div className="lp-card">
-                        <div className="lp-card-icon">🎨</div>
+                        <div className="lp-card-icon">1</div>
                         <h3>Visual Editing</h3>
                         <p>Drag, drop, resize, and style elements with complete freedom. No coding knowledge required to visualize ideas.</p>
                     </div>
 
                     <div className="lp-card">
-                        <div className="lp-card-icon">📱</div>
+                        <div className="lp-card-icon">2</div>
                         <h3>Responsive Design</h3>
                         <p>Switch between Desktop, Tablet, and Mobile views. Auto-generates @media queries for perfect responsiveness.</p>
                     </div>
 
                     <div className="lp-card">
-                        <div className="lp-card-icon">💻</div>
+                        <div className="lp-card-icon">3</div>
                         <h3>Code Export</h3>
                         <p>Instantly generate clean HTML and CSS code ready to be used in your projects. Just copy and paste.</p>
                     </div>
 
                     <div className="lp-card">
-                        <div className="lp-card-icon">🔒</div>
+                        <div className="lp-card-icon">4</div>
                         <h3>Precision Control</h3>
                         <p>Lock elements, use alignment helpers, and fine-tune properties to pixel perfection.</p>
                     </div>
 
                     <div className="lp-card">
-                        <div className="lp-card-icon">💾</div>
+                        <div className="lp-card-icon">5</div>
                         <h3>Auto-Save</h3>
                         <p>Your work is automatically saved to your browser. Close the tab and come back later without losing progress.</p>
                     </div>
 
                     <div className="lp-card">
-                        <div className="lp-card-icon">⚡</div>
+                        <div className="lp-card-icon">6</div>
                         <h3>Fast Workflow</h3>
                         <p>Use keyboard shortcuts, multi-select (coming soon), and quick color palettes to work at the speed of thought.</p>
                     </div>
