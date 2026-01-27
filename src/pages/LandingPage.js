@@ -47,40 +47,42 @@ const LandingPage = () => {
                 </div>
 
                 <div className="lp-grid">
-                    <div className="lp-card">
+                    <div className="lp-card lp-card-visual">
                         <div className="lp-card-icon">1</div>
                         <h3>Visual Editing</h3>
-                        <p>Drag, drop, resize, and style elements with complete freedom. No coding knowledge required to visualize ideas.</p>
+                        <p>Drag, drop, resize, and style elements with complete freedom. No coding knowledge required to visualize ideas. Experience the power of absolute positioning paired with intuitive transform controls.</p>
+                        <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>Whether you're building a simple hero section or a complex multi-layered interface, our visual engine ensures what you see is exactly what you get in the final code.</p>
                     </div>
 
-                    <div className="lp-card">
+                    <div className="lp-card lp-card-responsive">
                         <div className="lp-card-icon">2</div>
                         <h3>Responsive Design</h3>
-                        <p>Switch between Desktop, Tablet, and Mobile views. Auto-generates @media queries for perfect responsiveness.</p>
+                        <p>Switch between Desktop, Tablet, and Mobile views effortlessly.</p>
                     </div>
 
-                    <div className="lp-card">
+                    <div className="lp-card lp-card-code">
                         <div className="lp-card-icon">3</div>
                         <h3>Code Export</h3>
-                        <p>Instantly generate clean HTML and CSS code ready to be used in your projects. Just copy and paste.</p>
+                        <p>Instantly generate clean HTML and CSS code ready for production.</p>
                     </div>
 
-                    <div className="lp-card">
+                    <div className="lp-card lp-card-lock">
                         <div className="lp-card-icon">4</div>
                         <h3>Precision Control</h3>
-                        <p>Lock elements, use alignment helpers, and fine-tune properties to pixel perfection.</p>
+                        <p>Lock elements, use alignment helpers, and fine-tune properties to pixel perfection. Gain full control over radii, borders, and spacing with our advanced property panel.</p>
+                        <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>Every element can be locked to prevent accidental moves, allowing you to build complex layouts with total confidence and zero frustration.</p>
                     </div>
 
-                    <div className="lp-card">
+                    <div className="lp-card lp-card-save">
                         <div className="lp-card-icon">5</div>
                         <h3>Auto-Save</h3>
-                        <p>Your work is automatically saved to your browser. Close the tab and come back later without losing progress.</p>
+                        <p>Your work is automatically saved to your browser's local store.</p>
                     </div>
 
-                    <div className="lp-card">
+                    <div className="lp-card lp-card-speed">
                         <div className="lp-card-icon">6</div>
                         <h3>Fast Workflow</h3>
-                        <p>Use keyboard shortcuts, multi-select (coming soon), and quick color palettes to work at the speed of thought.</p>
+                        <p>Use keyboard shortcuts, quick color palettes, and rapid element creation to work at the speed of thought. Spend less time in menus and more time in the flow state of design.</p>
                     </div>
                 </div>
             </section>
