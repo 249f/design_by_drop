@@ -256,6 +256,36 @@ body {
     color: var(--lp-text-muted);
 }
 
+.lp-scroll-down {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    color: var(--lp-text-muted);
+    transition: color 0.3s;
+    cursor: default;
+}
+
+.lp-scroll-down {
+    animation: bounce 1.5s infinite;
+    font-size: 50px;
+    color: var(--lp-primary);
+
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
 /* Animations */
 @keyframes fadeInUp {
     from {

@@ -32,6 +32,9 @@ const LandingPage = () => {
                         <a href="#features" className="lp-btn-secondary">Learn More</a>
                     </div>
                 </div>
+                <div className="lp-scroll-down">
+                    <span>︾</span>
+                </div>
             </section>
 
             {/* Features Grid */}
