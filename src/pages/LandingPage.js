@@ -29,7 +29,7 @@ const LandingPage = () => {
                     </p>
                     <div className="lp-cta-group">
                         <Link to="/creativity/home" className="lp-btn-primary lp-btn-large">Start Creating</Link>
-                        <a href="#demo" className="lp-btn-secondary">Watch Demo</a>
+                        <a href="#features" className="lp-btn-secondary">Learn More</a>
                     </div>
                 </div>
             </section>
