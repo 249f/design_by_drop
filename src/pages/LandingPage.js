@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
+import { Github, Instagram, Linkedin, Facebook } from 'lucide-react';
+
 
 const LandingPage = () => {
     return (
@@ -80,6 +82,23 @@ const LandingPage = () => {
                         <h3>Fast Workflow</h3>
                         <p>Use keyboard shortcuts, multi-select (coming soon), and quick color palettes to work at the speed of thought.</p>
                     </div>
+                </div>
+            </section>
+
+            {/* about section */}
+            <section id="about" className="lp-about">
+                <div className="lp-section-header">
+                    <h2 className="lp-section-title">About</h2>
+                    <p style={{ color: 'var(--lp-text-muted)' }}>Learn more about DesignByDrop Developer</p>
+                </div>
+                <div className="lp-about-content">
+                    <h1>ALi Abdellatif</h1>
+                    <p>I'm a sudanese software engineer who loves building software but not a big fan of writing code syntax, so i decided to create a tool that helps me and others to create websites visually without writing code, and this is how DesignByDrop was born :)</p>
+                    <h2>want to support me ? a star on github would be great :)</h2>
+                    <Link to="https://github.com/249f" className="lp-btn-primary"><Github size={20} /></Link>
+                    <Link to="https://instagram.com/otp_ali" className="lp-btn-primary"><Instagram size={20} /></Link>
+                    <Link to="https://www.linkedin.com/in/ali-abdellatif-1482693a1" className="lp-btn-primary"><Linkedin size={20} /></Link>
+                    <Link to="https://www.facebook.com/249ff" className="lp-btn-primary"><Facebook size={20} /></Link>
                 </div>
             </section>
 

@@ -274,6 +274,47 @@ body {
 
 }
 
+.lp-about {
+    padding: 6rem 4rem;
+    background: #0f0a14;
+    position: relative;
+}
+
+.lp-about-content h2 {
+    margin-top: 2rem;
+}
+
+.lp-about-content p {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+}
+
+
+.lp-about-content a {
+    margin-top: 2rem;
+    display: inline-block;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 0;
+    line-height: 55px;
+    margin: 20px;
+}
+
+.lp-about-content a:hover {
+    background: var(--lp-primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(142, 0, 177, 0.6);
+}
+
+.lp-about-content a:active {
+    background: var(--lp-primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(142, 0, 177, 0.6);
+}
+
+
 @keyframes bounce {
 
     0%,
