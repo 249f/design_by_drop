@@ -19,7 +19,7 @@ const LandingPage = () => {
             {/* Hero Section */}
             <section className="lp-hero">
                 <div className="lp-hero-content">
-                    <div className="lp-hero-badge">No-Code Visual Builder</div>
+                    <div className="lp-hero-badge">This is a beta version, much more to come :)</div>
                     <h1 className="lp-hero-title">
                         <span>I Hate Coding Syntax</span><br />
                         This is why I created DesignByDrop
