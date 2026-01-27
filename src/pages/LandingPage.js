@@ -87,18 +87,42 @@ const LandingPage = () => {
 
             {/* about section */}
             <section id="about" className="lp-about">
-                <div className="lp-section-header">
-                    <h2 className="lp-section-title">About</h2>
-                    <p style={{ color: 'var(--lp-text-muted)' }}>Learn more about DesignByDrop Developer</p>
-                </div>
-                <div className="lp-about-content">
-                    <h1>ALi Abdellatif</h1>
-                    <p>I'm a sudanese software engineer who loves building software but not a big fan of writing code syntax, so i decided to create a tool that helps me and others to create websites visually without writing code, and this is how DesignByDrop was born :)</p>
-                    <h2>want to support me ? a star on github would be great :)</h2>
-                    <Link to="https://github.com/249f" className="lp-btn-primary"><Github size={20} /></Link>
-                    <Link to="https://instagram.com/otp_ali" className="lp-btn-primary"><Instagram size={20} /></Link>
-                    <Link to="https://www.linkedin.com/in/ali-abdellatif-1482693a1" className="lp-btn-primary"><Linkedin size={20} /></Link>
-                    <Link to="https://www.facebook.com/249ff" className="lp-btn-primary"><Facebook size={20} /></Link>
+                <div className="lp-about-container">
+                    <div className="lp-about-header">
+                        <span className="lp-about-sup">The Story</span>
+                        <h2 className="lp-about-title">Behind DesignByDrop</h2>
+                    </div>
+
+                    <div className="lp-about-grid">
+                        <div className="lp-about-text-block">
+                            <h3>Driven by Passion</h3>
+                            <p>
+                                Hi, I'm <strong>ALi Abdellatif</strong>, a Sudanese software engineer who believes that the web should be built by dreamers, not just syntax masters. For years, I felt the friction between an idea and its implementation. The "Vibe Coding" era showed us that AI can help write code, but the "Vibe Designing" era is where the real magic happens where you see what you build, instantly.
+                            </p>
+                            <p>
+                                DesignByDrop started as a personal project to bridgethis gap. I wanted a tool that felt like a canvas, not a terminal. A place where you can drag a shape, change a color, and walk away with production-ready HTML and CSS.
+                            </p>
+                        </div>
+
+                        <div className="lp-about-text-block">
+                            <h3>The Vision</h3>
+                            <p>
+                                My goal is to keep this tool free and open-source forever. I want to empower creators in Sudan and across the globe to build their digital presence without being held back by complex setups or expensive subscriptions.
+                            </p>
+                            <div className="lp-about-quote">
+                                "My Vision was: with all this teqnology and pepole still write code to build software !!! "
+                            </div>
+                            <div className="lp-about-support">
+                                <p>If you find this tool helpful, a star on GitHub is the best way to support the journey. Let's build the future of visual design together.</p>
+                                <div className="lp-about-socials">
+                                    <Link to="https://github.com/249f" className="lp-social-link" title="GitHub"><Github size={20} /></Link>
+                                    <Link to="https://instagram.com/otp_ali" className="lp-social-link" title="Instagram"><Instagram size={20} /></Link>
+                                    <Link to="https://www.linkedin.com/in/ali-abdellatif-1482693a1" className="lp-social-link" title="LinkedIn"><Linkedin size={20} /></Link>
+                                    <Link to="https://www.facebook.com/249ff" className="lp-social-link" title="Facebook"><Facebook size={20} /></Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

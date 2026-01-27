@@ -258,7 +258,7 @@ body {
 
 .lp-scroll-down {
     position: absolute;
-    bottom: 2rem;
+    bottom: -1.4rem;
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.2rem;
@@ -272,46 +272,126 @@ body {
     font-size: 50px;
     color: var(--lp-primary);
 
+
 }
 
 .lp-about {
-    padding: 6rem 4rem;
+    padding: 10rem 4rem;
     background: #0f0a14;
     position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-.lp-about-content h2 {
-    margin-top: 2rem;
+.lp-about::before {
+    content: 'ABOUT';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20vw;
+    font-weight: 900;
+    color: rgba(142, 0, 177, 0.03);
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: 2rem;
 }
 
-.lp-about-content p {
-    margin-top: 2rem;
-    font-size: 1.2rem;
+.lp-about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
+.lp-about-header {
+    margin-bottom: 5rem;
+    text-align: left;
+}
 
-.lp-about-content a {
-    margin-top: 2rem;
-    display: inline-block;
-    border-radius: 100%;
+.lp-about-sup {
+    color: var(--lp-primary);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.lp-about-title {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.lp-about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: start;
+}
+
+.lp-about-text-block h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--lp-accent);
+}
+
+.lp-about-text-block p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--lp-text-muted);
+    margin-bottom: 2rem;
+}
+
+.lp-about-text-block strong {
+    color: white;
+    font-weight: 600;
+}
+
+.lp-about-quote {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: white;
+    border-left: 4px solid var(--lp-primary);
+    padding-left: 2rem;
+    margin: 3rem 0;
+    line-height: 1.4;
+}
+
+.lp-about-support {
+    background: rgba(142, 0, 177, 0.05);
+    padding: 2.5rem;
+    border-radius: 30px;
+    border: 1px solid rgba(142, 0, 177, 0.1);
+}
+
+.lp-about-socials {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.lp-social-link {
     width: 50px;
     height: 50px;
-    text-align: center;
-    padding: 0;
-    line-height: 55px;
-    margin: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.lp-about-content a:hover {
-    background: var(--lp-primary-light);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(142, 0, 177, 0.6);
-}
-
-.lp-about-content a:active {
-    background: var(--lp-primary-light);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(142, 0, 177, 0.6);
+.lp-social-link:hover {
+    background: var(--lp-primary);
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 10px 20px rgba(142, 0, 177, 0.4);
+    border-color: var(--lp-primary-light);
 }
 
 
@@ -368,5 +448,22 @@ body {
 
     .lp-features {
         padding: 4rem 1.5rem;
+    }
+
+    .lp-about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .lp-about {
+        padding: 6rem 1.5rem;
+    }
+
+    .lp-about-title {
+        font-size: 2.5rem;
+    }
+
+    .lp-about-sup {
+        font-size: 0.8rem;
     }
 }
