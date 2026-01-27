@@ -95,25 +95,25 @@ const LandingPage = () => {
 
                     <div className="lp-about-grid">
                         <div className="lp-about-text-block">
-                            <h3>Driven by Passion</h3>
+                            <h3>Reson of the idea</h3>
                             <p>
-                                Hi, I'm <strong>ALi Abdellatif</strong>, a Sudanese software engineer who believes that the web should be built by dreamers, not just syntax masters. For years, I felt the friction between an idea and its implementation. The "Vibe Coding" era showed us that AI can help write code, but the "Vibe Designing" era is where the real magic happens where you see what you build, instantly.
+                                Hi, I'm <strong>ALi Abdellatif</strong>, a Sudanese software engineer who believes that web development should be easier and more fun than it is today, not just boring syntax. For years there was a question in my mind, why we are still using code to build software, with all this technology and people still write code to build software? The "Vibe Coding" era showed us that AI can help write code, but the "Vibe Designing" era is where the real magic happens where you see what you build, instantly.
                             </p>
                             <p>
-                                DesignByDrop started as a personal project to bridgethis gap. I wanted a tool that felt like a canvas, not a terminal. A place where you can drag a shape, change a color, and walk away with production-ready HTML and CSS.
+                                DesignByDrop started as a small personal project and right now it's just the beginning with the current beta version. A place where you can drag a shape, change a color, and walk away with a ready to copy HTML and CSS code.
                             </p>
                         </div>
 
                         <div className="lp-about-text-block">
-                            <h3>The Vision</h3>
+                            <h3>Why it's free?</h3>
                             <p>
                                 My goal is to keep this tool free and open-source forever. I want to empower creators in Sudan and across the globe to build their digital presence without being held back by complex setups or expensive subscriptions.
                             </p>
                             <div className="lp-about-quote">
-                                "My Vision was: with all this teqnology and pepole still write code to build software !!! "
+                                "My Vision was: with all this technology and pepole still write code to build software !!! "
                             </div>
                             <div className="lp-about-support">
-                                <p>If you find this tool helpful, a star on GitHub is the best way to support the journey. Let's build the future of visual design together.</p>
+                                <p>If you find this tool helpful, a star on GitHub is the best way to support the journey. Feel free to drop your reviews and feedback on any social media platform.</p>
                                 <div className="lp-about-socials">
                                     <Link to="https://github.com/249f" className="lp-social-link" title="GitHub"><Github size={20} /></Link>
                                     <Link to="https://instagram.com/otp_ali" className="lp-social-link" title="Instagram"><Instagram size={20} /></Link>
