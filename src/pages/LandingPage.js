@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
-import { Github, Instagram, Linkedin, Facebook } from 'lucide-react';
+import { Github, Instagram, Linkedin, Facebook, MousePointer, Code, Save, Lock, Zap, Tablet } from 'lucide-react';
 
 
 const LandingPage = () => {
@@ -48,39 +48,39 @@ const LandingPage = () => {
 
                 <div className="lp-grid">
                     <div className="lp-card lp-card-visual">
-                        <div className="lp-card-icon">1</div>
+                        <div className="lp-card-icon"><MousePointer size={24} /></div>
                         <h3>Visual Editing</h3>
                         <p>Drag, drop, resize, and style elements with complete freedom. No coding knowledge required to visualize ideas. Experience the power of absolute positioning paired with intuitive transform controls.</p>
                         <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>Whether you're building a simple hero section or a complex multi-layered interface, our visual engine ensures what you see is exactly what you get in the final code.</p>
                     </div>
 
                     <div className="lp-card lp-card-responsive">
-                        <div className="lp-card-icon">2</div>
+                        <div className="lp-card-icon"><Tablet size={24} /></div>
                         <h3>Responsive Design</h3>
                         <p>Switch between Desktop, Tablet, and Mobile views effortlessly.</p>
                     </div>
 
                     <div className="lp-card lp-card-code">
-                        <div className="lp-card-icon">3</div>
+                        <div className="lp-card-icon"><Code size={24} /></div>
                         <h3>Code Export</h3>
                         <p>Instantly generate clean HTML and CSS code ready for production.</p>
                     </div>
 
                     <div className="lp-card lp-card-lock">
-                        <div className="lp-card-icon">4</div>
+                        <div className="lp-card-icon"><Lock size={24} /></div>
                         <h3>Precision Control</h3>
                         <p>Lock elements, use alignment helpers, and fine tune properties to pixel perfection. Gain full control over radii, borders, and spacing with the advanced property panel.</p>
                         <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>Every element can be locked to prevent accidental moves, allowing you to build complex layouts with total confidence and zero frustration.</p>
                     </div>
 
                     <div className="lp-card lp-card-save">
-                        <div className="lp-card-icon">5</div>
+                        <div className="lp-card-icon"><Save size={24} /></div>
                         <h3>Auto-Save</h3>
                         <p>Your work is automatically saved to your browser's local store.</p>
                     </div>
 
                     <div className="lp-card lp-card-speed">
-                        <div className="lp-card-icon">6</div>
+                        <div className="lp-card-icon"><Zap size={24} /></div>
                         <h3>Fast Workflow</h3>
                         <p>with the easy side panel you can use shortcuts, quick color palettes, and rapid element creation. Spend less time in coding and more time designing.</p>
                     </div>
