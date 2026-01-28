@@ -69,7 +69,7 @@ const LandingPage = () => {
                     <div className="lp-card lp-card-lock">
                         <div className="lp-card-icon">4</div>
                         <h3>Precision Control</h3>
-                        <p>Lock elements, use alignment helpers, and fine-tune properties to pixel perfection. Gain full control over radii, borders, and spacing with our advanced property panel.</p>
+                        <p>Lock elements, use alignment helpers, and fine tune properties to pixel perfection. Gain full control over radii, borders, and spacing with the advanced property panel.</p>
                         <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>Every element can be locked to prevent accidental moves, allowing you to build complex layouts with total confidence and zero frustration.</p>
                     </div>
 
@@ -99,17 +99,17 @@ const LandingPage = () => {
                         <div className="lp-about-text-block">
                             <h3>Reson of the idea</h3>
                             <p>
-                                Hi, I'm <strong>ALi Abdellatif</strong>, a Sudanese software engineer who believes that web development should be easier and more fun than it is today, not just boring syntax. For years there was a question in my mind, why we are still using code to build software, with all this technology and people still write code to build software? The "Vibe Coding" era showed us that AI can help write code, but the "Vibe Designing" era is where the real magic happens where you see what you build, instantly.
+                                Hi, I'm <strong>ALi Abdellatif</strong>, a Sudanese software engineer who believes that web development should be easier and more fun than it is today, not just boring syntax. For years there was a question in my mind, why we are still using code to build software, with all this technology and people still write code to build software? The Vibe Coding hype proved that AI can help write code, but the Vibe Designing era is what i'm aiming for, where you see what you build, instantly.
                             </p>
                             <p>
-                                DesignByDrop started as a small personal project and right now it's just the beginning with the current beta version. A place where you can drag a shape, change a color, and walk away with a ready to copy HTML and CSS code.
+                                DesignByDrop is how i'm trying to make my country Sudan proud, showing the tech industry that Sudanese have something to offer, it's a small personal project and right now it's just the beginning with the current beta version.
                             </p>
                         </div>
 
                         <div className="lp-about-text-block">
                             <h3>Why it's free?</h3>
                             <p>
-                                My goal is to keep this tool free and open-source forever. I want to empower creators in Sudan and across the globe to build their digital presence without being held back by complex setups or expensive subscriptions.
+                                My goal is to keep this tool free and open-source forever. I want to empower creators in Sudan and across the globe to build their digital presence without being held back by complex setups or expensive subscriptions, to prove to the world that Sudanese can build something great.
                             </p>
                             <div className="lp-about-quote">
                                 "My Vision was: with all this technology and pepole still write code to build software !!! "
