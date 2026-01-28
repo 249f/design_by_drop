@@ -674,7 +674,26 @@ function Home() {
                         />
                         <label htmlFor="showAlignmentHelpers" className="checkbox-label">Alignment Helper</label>
                     </div>
+                    {/* 8-Point Resizing Toggle */}
+                    <div className="property-group">
+                        <div className="checkbox-row">
+                            <input
+                                type="checkbox"
+                                id="useEightJoints"
+                                checked={selectedElementData.useEightJoints || false}
+                                onChange={(e) => updateElementProperty('useEightJoints', e.target.checked)}
+                                disabled={selectedElementData.locked}
+                            />
+                            <label htmlFor="useEightJoints" className="checkbox-label">Use 8 Resize Joints</label>
+                        </div>
+                    </div>
+
+
+
+
+
                 </div>
+
 
                 {/* Buttons */}
                 <div className="sidebar-section">
@@ -802,19 +821,7 @@ function Home() {
                             </div>
                         </div>
 
-                        {/* 8-Point Resizing Toggle */}
-                        <div className="property-group">
-                            <div className="checkbox-row">
-                                <input
-                                    type="checkbox"
-                                    id="useEightJoints"
-                                    checked={selectedElementData.useEightJoints || false}
-                                    onChange={(e) => updateElementProperty('useEightJoints', e.target.checked)}
-                                    disabled={selectedElementData.locked}
-                                />
-                                <label htmlFor="useEightJoints" className="checkbox-label">Use 8 Resize Joints</label>
-                            </div>
-                        </div>
+
 
                         {/* Color Picker */}
                         <div className="property-group">
@@ -837,9 +844,9 @@ function Home() {
                             </div>
                         </div>
 
-                        {/* Quick Colors */}
+                        {/* Quick Colors
                         <div className="property-group">
-                            <label>Quick Colors</label>
+                            <label>Q Colors</label>
                             <div className="quick-colors">
                                 {['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#ecf0f1'].map(color => (
                                     <button
@@ -851,7 +858,7 @@ function Home() {
                                     />
                                 ))}
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Border Controls */}
                         <div className="property-group">
