@@ -13,16 +13,21 @@
 
 /* Home Workspace Styles */
 .home-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "sidebar main";
   height: 100vh;
   overflow: hidden;
   background: var(--main-color);
   color: var(--text-primary);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
 }
 
 /* Left Sidebar */
 .sidebar {
+  grid-area: sidebar;
   width: 240px;
   background: linear-gradient(180deg, var(--main-color) 0%, var(--bg-app) 100%);
   padding: 16px;
@@ -452,6 +457,7 @@ button:disabled {
 
 /* Main Canvas Area */
 .canvas-container {
+  grid-area: main;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -571,6 +577,56 @@ button:disabled {
 .bg-color-text:focus {
   outline: none;
   border-color: var(--accent-color);
+}
+
+/* Zoom Controls */
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid var(--border-color);
+}
+
+.zoom-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-btn:hover:not(:disabled) {
+  background: rgba(79, 195, 247, 0.2);
+  border-color: var(--accent-color);
+}
+
+.zoom-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.zoom-btn.reset {
+  width: auto;
+  padding: 0 12px;
+  font-size: 0.75rem;
+}
+
+.zoom-level {
+  min-width: 50px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--accent-color);
+  font-family: 'Fira Code', 'Consolas', monospace;
 }
 
 /* Canvas Wrapper */
@@ -745,16 +801,95 @@ button:disabled {
   width: 0 !important;
 }
 
-/* Right Code Panel */
+/* Code Panel Overlay */
 .code-panel {
-  width: 300px;
   background: linear-gradient(180deg, var(--bg-sidebar) 0%, var(--bg-app) 100%);
   padding: 16px;
-  border-left: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   gap: 16px;
   overflow-y: auto;
+}
+
+.code-panel.overlay-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 380px;
+  height: 100vh;
+  border-left: 1px solid var(--border-color);
+  z-index: 1000;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.code-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 8px;
+}
+
+.code-panel-header h2 {
+  font-size: 1rem;
+  color: var(--accent-color);
+  margin: 0;
+}
+
+.close-panel-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* See Code Button */
+.see-code-btn {
+  padding: 8px 16px;
+  background: rgba(142, 0, 177, 0.2);
+  color: #f0abfc;
+  border: 1px solid rgba(142, 0, 177, 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.see-code-btn:hover {
+  background: rgba(142, 0, 177, 0.4);
+  border-color: #8e00b1;
+}
+
+.see-code-btn.active {
+  background: #8e00b1;
+  color: white;
+  border-color: #8e00b1;
 }
 
 .code-section {

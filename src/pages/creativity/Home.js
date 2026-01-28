@@ -50,6 +50,8 @@ function Home() {
     const [canvasBackground, setCanvasBackground] = useState(savedState?.canvasBackground || '#1e1e2f');
     const [activeScreen, setActiveScreen] = useState(savedState?.activeScreen || 'desktop');
     const [customSize, setCustomSize] = useState(savedState?.customSize || { width: 1200, height: 800 });
+    const [zoomLevel, setZoomLevel] = useState(1);
+    const [showCodePanel, setShowCodePanel] = useState(false);
 
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
@@ -176,6 +178,11 @@ function Home() {
         css += `${indent}  width: ${el.width}px;\n`;
         css += `${indent}  height: ${el.height}px;\n`;
 
+        // Rotation
+        if (el.rotation && el.rotation !== 0) {
+            css += `${indent}  transform: rotate(${el.rotation}deg);\n`;
+        }
+
         // Border styles
         if (el.borderWidth && el.borderWidth > 0) {
             css += `${indent}  border: ${el.borderWidth}px solid ${el.borderColor || '#000'};\n`;
@@ -191,10 +198,11 @@ function Home() {
             css += `${indent}  background-color: ${el.backgroundColor};\n`;
         } else if (el.type === 'text') {
             css += `${indent}  color: ${el.color};\n`;
-            css += `${indent}  font-size: 16px;\n`;
+            css += `${indent}  font-size: ${el.fontSize || 16}px;\n`;
         } else if (el.type === 'button') {
             css += `${indent}  background-color: ${el.backgroundColor};\n`;
             css += `${indent}  color: ${el.color};\n`;
+            css += `${indent}  font-size: ${el.fontSize || 16}px;\n`;
             if (el.variant === 'outline') {
                 css += `${indent}  border: 2px solid ${el.backgroundColor};\n`;
                 css += `${indent}  background-color: transparent;\n`;
@@ -223,8 +231,8 @@ function Home() {
         if (!draggedShape || !canvasRef.current) return;
 
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = (e.clientX - rect.left) / zoomLevel;
+        const y = (e.clientY - rect.top) / zoomLevel;
 
         const getDefaultProps = () => {
             switch (draggedShape.type) {
@@ -237,9 +245,10 @@ function Home() {
                         color: draggedShape.variant === 'outline' ? '#3498db' : '#ffffff',
                         content: 'Button',
                         variant: draggedShape.variant,
+                        fontSize: 16,
                     };
                 case 'text':
-                    return { width: 100, height: 30, backgroundColor: 'transparent', color: '#ffffff', content: 'Text' };
+                    return { width: 100, height: 30, backgroundColor: 'transparent', color: '#ffffff', content: 'Text', fontSize: 16 };
                 case 'square':
                 case 'circle':
                     return { width: 80, height: 80, backgroundColor: '#3498db', color: '#ffffff', content: '' };
@@ -258,6 +267,7 @@ function Home() {
             borderWidth: 0,
             borderColor: '#000000',
             locked: false,
+            rotation: 0,
             ...props,
         };
 
@@ -541,6 +551,8 @@ function Home() {
                 : (styles.borderWidth > 0 ? `${styles.borderWidth}px solid ${styles.borderColor}` : 'none'),
             borderRadius: element.type === 'circle' ? '50%' : `${styles.borderRadius || 0}px`,
             opacity: element.locked ? 0.7 : 1,
+            transform: styles.rotation ? `rotate(${styles.rotation}deg)` : undefined,
+            fontSize: (element.type === 'text' || element.type === 'button') ? `${styles.fontSize || 16}px` : undefined,
         };
 
         return (
@@ -688,6 +700,40 @@ function Home() {
                                 </div>
                             </div>
                         )}
+
+                        {/* Font Size Control */}
+                        {(selectedElementData.type === 'text' || selectedElementData.type === 'button') && (
+                            <div className="property-group">
+                                <label>Font Size</label>
+                                <div className="slider-input">
+                                    <input
+                                        type="range"
+                                        min="8"
+                                        max="72"
+                                        value={getElementStyles(selectedElementData).fontSize || 16}
+                                        onChange={(e) => updateElementProperty('fontSize', parseInt(e.target.value))}
+                                        disabled={selectedElementData.locked}
+                                    />
+                                    <span>{getElementStyles(selectedElementData).fontSize || 16}px</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Rotation Control */}
+                        <div className="property-group">
+                            <label>Rotation</label>
+                            <div className="slider-input">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="360"
+                                    value={getElementStyles(selectedElementData).rotation || 0}
+                                    onChange={(e) => updateElementProperty('rotation', parseInt(e.target.value))}
+                                    disabled={selectedElementData.locked}
+                                />
+                                <span>{getElementStyles(selectedElementData).rotation || 0}°</span>
+                            </div>
+                        </div>
 
                         {/* 8-Point Resizing Toggle */}
                         <div className="property-group">
@@ -889,10 +935,43 @@ function Home() {
                             onChange={(e) => setCanvasBackground(e.target.value)}
                         />
                     </div>
+
+                    {/* Zoom Controls */}
+                    <div className="zoom-controls">
+                        <button
+                            className="zoom-btn"
+                            onClick={() => setZoomLevel(prev => Math.max(0.25, prev - 0.25))}
+                            disabled={zoomLevel <= 0.25}
+                        >
+                            −
+                        </button>
+                        <span className="zoom-level">{Math.round(zoomLevel * 100)}%</span>
+                        <button
+                            className="zoom-btn"
+                            onClick={() => setZoomLevel(prev => Math.min(2, prev + 0.25))}
+                            disabled={zoomLevel >= 2}
+                        >
+                            +
+                        </button>
+                        <button
+                            className="zoom-btn reset"
+                            onClick={() => setZoomLevel(1)}
+                        >
+                            Reset
+                        </button>
+                    </div>
+
+                    {/* See Code Button */}
+                    <button
+                        className={`see-code-btn ${showCodePanel ? 'active' : ''}`}
+                        onClick={() => setShowCodePanel(!showCodePanel)}
+                    >
+                        {showCodePanel ? '✕ Hide Code' : '{ } See Code'}
+                    </button>
                 </div>
 
                 {/* Canvas */}
-                <div className="canvas-wrapper">
+                <div className="canvas-wrapper" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
                     <div
                         ref={canvasRef}
                         className="canvas"
@@ -929,32 +1008,38 @@ function Home() {
                 </div>
             </main>
 
-            {/* Right Panel - Code Output */}
-            <aside className="code-panel">
-                <div className="code-section">
-                    <div className="code-header">
-                        <h3>HTML</h3>
-                        <button className="copy-btn" onClick={() => copyToClipboard(generateHTML())}>
-                            Copy
-                        </button>
+            {/* Code Panel Overlay */}
+            {showCodePanel && (
+                <aside className="code-panel overlay-panel">
+                    <div className="code-panel-header">
+                        <h2>Generated Code</h2>
+                        <button className="close-panel-btn" onClick={() => setShowCodePanel(false)}>✕</button>
                     </div>
-                    <pre className="code-output">
-                        <code>{generateHTML()}</code>
-                    </pre>
-                </div>
+                    <div className="code-section">
+                        <div className="code-header">
+                            <h3>HTML</h3>
+                            <button className="copy-btn" onClick={() => copyToClipboard(generateHTML())}>
+                                Copy
+                            </button>
+                        </div>
+                        <pre className="code-output">
+                            <code>{generateHTML()}</code>
+                        </pre>
+                    </div>
 
-                <div className="code-section">
-                    <div className="code-header">
-                        <h3>CSS</h3>
-                        <button className="copy-btn" onClick={() => copyToClipboard(generateCSS())}>
-                            Copy
-                        </button>
+                    <div className="code-section">
+                        <div className="code-header">
+                            <h3>CSS</h3>
+                            <button className="copy-btn" onClick={() => copyToClipboard(generateCSS())}>
+                                Copy
+                            </button>
+                        </div>
+                        <pre className="code-output">
+                            <code>{generateCSS()}</code>
+                        </pre>
                     </div>
-                    <pre className="code-output">
-                        <code>{generateCSS()}</code>
-                    </pre>
-                </div>
-            </aside>
+                </aside>
+            )}
         </div>
     );
 }
