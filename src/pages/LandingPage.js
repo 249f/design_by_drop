@@ -82,7 +82,7 @@ const LandingPage = () => {
                     <div className="lp-card lp-card-speed">
                         <div className="lp-card-icon">6</div>
                         <h3>Fast Workflow</h3>
-                        <p>Use keyboard shortcuts, quick color palettes, and rapid element creation to work at the speed of thought. Spend less time in menus and more time in the flow state of design.</p>
+                        <p>with the easy side panel you can use shortcuts, quick color palettes, and rapid element creation. Spend less time in coding and more time designing.</p>
                     </div>
                 </div>
             </section>
