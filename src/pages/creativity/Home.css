@@ -898,8 +898,8 @@ button:disabled {
 /* See Code Button */
 .see-code-btn {
   padding: 8px 16px;
-  background: rgba(142, 0, 177, 0.2);
-  color: #f0abfc;
+  background: #8e00b1;
+  color: #ffffff;
   border: 1px solid rgba(142, 0, 177, 0.4);
   border-radius: 6px;
   cursor: pointer;
@@ -910,8 +910,9 @@ button:disabled {
 }
 
 .see-code-btn:hover {
-  background: rgba(142, 0, 177, 0.4);
+  scale: 1.06;
   border-color: #8e00b1;
+
 }
 
 .see-code-btn.active {

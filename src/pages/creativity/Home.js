@@ -258,7 +258,7 @@ function Home() {
                         fontSize: 16,
                     };
                 case 'p':
-                    return { width: 200, height: 100, backgroundColor: 'transparent', color: '#ffffff', content: 'Double click to edit text.\nEnter to add new line.', fontSize: 16 };
+                    return { width: 200, height: 100, backgroundColor: 'transparent', color: '#ffffff', content: 'delete this text and start typing :)', fontSize: 16 };
                 case 'input':
                     return { width: 200, height: 40, backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff', placeholder: 'Enter text...', fontSize: 16, borderWidth: 1, borderColor: '#ffffff' };
                 case 'square':
