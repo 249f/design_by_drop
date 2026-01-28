@@ -24,8 +24,8 @@ const DesktopOnly = ({ children }) => {
                     </div>
                     <h1 className="do-title">Desktop Required</h1>
                     <p className="do-message">
-                        DesignByDrop Workspace is a high-precision design environment built for desktop use.
-                        Please switch to a computer to start creating.
+                        DesignByDrop Workspace is a high precision design environment built for desktop use.
+                        Please switch to a computer to start creating :)
                     </p>
                     <Link to="/" className="do-back-link">
                         <ArrowLeft size={18} />
