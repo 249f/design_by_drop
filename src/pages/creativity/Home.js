@@ -662,6 +662,26 @@ function Home() {
                     </div>
                 </div>
 
+
+
+
+                {/* Buttons */}
+                <div className="sidebar-section">
+                    <h2 className="sidebar-title">Buttons</h2>
+                    <div className="shapes-list">
+                        {buttons.map((btn) => (
+                            <div
+                                key={btn.id}
+                                className="shape-item"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, btn)}
+                            >
+                                <div className={`button-preview ${btn.variant}`}>{btn.name}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Global Settings */}
                 <div className="sidebar-section">
                     <h2 className="sidebar-title">Settings</h2>
@@ -689,27 +709,6 @@ function Home() {
                     </div>
 
 
-
-
-
-                </div>
-
-
-                {/* Buttons */}
-                <div className="sidebar-section">
-                    <h2 className="sidebar-title">Buttons</h2>
-                    <div className="shapes-list">
-                        {buttons.map((btn) => (
-                            <div
-                                key={btn.id}
-                                className="shape-item"
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, btn)}
-                            >
-                                <div className={`button-preview ${btn.variant}`}>{btn.name}</div>
-                            </div>
-                        ))}
-                    </div>
                 </div>
 
                 {/* Properties Panel */}
