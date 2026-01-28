@@ -115,7 +115,7 @@ const LandingPage = () => {
                                 "My Vision was: with all this technology and pepole still write code to build software !!! "
                             </div>
                             <div className="lp-about-support">
-                                <p>If you find this tool helpful, a star on GitHub is the best way to support the journey. Feel free to drop your reviews and feedback on any social media platform.</p>
+                                <p>If you found this tool helpful, a star on GitHub is the best way to support the journey. Feel free to drop your reviews and feedback on any social media platform.</p>
                                 <div className="lp-about-socials">
                                     <Link to="https://github.com/249f" className="lp-social-link" title="GitHub"><Github size={20} /></Link>
                                     <Link to="https://instagram.com/otp_ali" className="lp-social-link" title="Instagram"><Instagram size={20} /></Link>
