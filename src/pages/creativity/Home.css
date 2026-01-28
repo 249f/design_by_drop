@@ -637,13 +637,21 @@ button:disabled {
   justify-content: center;
   padding: 20px;
   overflow: auto;
+  min-height: 0;
+}
+
+.canvas-zoom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
 .canvas {
   border-radius: 8px;
   position: relative;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  transition: width 0.3s ease, height 0.3s ease;
   flex-shrink: 0;
 }
 

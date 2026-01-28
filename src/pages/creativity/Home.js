@@ -971,39 +971,49 @@ function Home() {
                 </div>
 
                 {/* Canvas */}
-                <div className="canvas-wrapper" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
+                <div className="canvas-wrapper">
                     <div
-                        ref={canvasRef}
-                        className="canvas"
+                        className="canvas-zoom-container"
                         style={{
+                            transform: `scale(${zoomLevel})`,
+                            transformOrigin: 'center center',
                             width: screenSize.width,
                             height: screenSize.height,
-                            backgroundColor: canvasBackground
                         }}
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                        onClick={handleCanvasClick}
                     >
-                        {elements.length === 0 && (
-                            <div className="canvas-placeholder">
-                                Drag and drop shapes here
-                            </div>
-                        )}
-                        {elements.map(renderElement)}
+                        <div
+                            ref={canvasRef}
+                            className="canvas"
+                            style={{
+                                width: screenSize.width,
+                                height: screenSize.height,
+                                backgroundColor: canvasBackground
+                            }}
+                            onDragOver={handleDragOver}
+                            onDrop={handleDrop}
+                            onClick={handleCanvasClick}
+                        >
+                            {elements.length === 0 && (
+                                <div className="canvas-placeholder">
+                                    Drag and drop shapes here
+                                </div>
+                            )}
+                            {elements.map(renderElement)}
 
-                        {/* Alignment Lines */}
-                        {alignmentLines.map((line, index) => (
-                            <div
-                                key={index}
-                                className="alignment-line"
-                                style={{
-                                    left: line.type === 'v' ? line.x : line.x1,
-                                    top: line.type === 'h' ? line.y : line.y1,
-                                    width: line.type === 'h' ? (line.x2 - line.x1) : 1,
-                                    height: line.type === 'v' ? (line.y2 - line.y1) : 1,
-                                }}
-                            />
-                        ))}
+                            {/* Alignment Lines */}
+                            {alignmentLines.map((line, index) => (
+                                <div
+                                    key={index}
+                                    className="alignment-line"
+                                    style={{
+                                        left: line.type === 'v' ? line.x : line.x1,
+                                        top: line.type === 'h' ? line.y : line.y1,
+                                        width: line.type === 'h' ? (line.x2 - line.x1) : 1,
+                                        height: line.type === 'v' ? (line.y2 - line.y1) : 1,
+                                    }}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </main>
