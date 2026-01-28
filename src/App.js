@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Home } from './pages/creativity';
 import LandingPage from './pages/LandingPage';
 import DesktopOnly from './components/DesktopOnly';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           } />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <Analytics />
       </div>
     </Router>
   );
