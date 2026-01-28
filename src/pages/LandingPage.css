@@ -86,13 +86,14 @@ body {
 
 /* Hero Section */
 .lp-hero {
-    min-height: 100vh;
+    height: 100vh;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 8rem 2rem 4rem;
+    padding: 0 2rem;
     position: relative;
     overflow: hidden;
 }
@@ -130,7 +131,7 @@ body {
 }
 
 .lp-hero-title {
-    font-size: 4.5rem;
+    font-size: 4rem;
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
@@ -161,12 +162,15 @@ body {
     display: flex;
     gap: 1.5rem;
     justify-content: center;
+    align-items: center;
     animation: fadeInUp 0.8s ease-out 0.6s backwards;
 }
 
 .lp-btn-large {
     padding: 1rem 2.5rem;
     font-size: 1.1rem;
+    min-width: 200px;
+    text-align: center;
 }
 
 .lp-btn-secondary {
@@ -179,6 +183,8 @@ body {
     font-size: 1.1rem;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 200px;
+    text-align: center;
 }
 
 .lp-btn-secondary:hover {
@@ -208,36 +214,7 @@ body {
     letter-spacing: -2px;
 }
 
-@media (max-width: 1100px) {
-    .lp-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 
-    .lp-card-visual,
-    .lp-card-speed {
-        grid-column: span 2;
-    }
-}
-
-@media (max-width: 768px) {
-    .lp-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .lp-card {
-        grid-column: span 1 !important;
-        grid-row: span 1 !important;
-        margin-top: 0 !important;
-        transform: none !important;
-        min-height: auto !important;
-        padding: 2rem;
-    }
-
-    .lp-section-title {
-        font-size: 2.5rem;
-    }
-}
 
 .lp-grid {
     display: grid;
@@ -367,21 +344,18 @@ body {
 
 .lp-scroll-down {
     position: absolute;
-    bottom: -1.4rem;
+    bottom: -1rem;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.2rem;
-    color: var(--lp-text-muted);
-    transition: color 0.3s;
-    cursor: default;
-}
-
-.lp-scroll-down {
+    color: var(--lp-primary);
     animation: bounce 1.5s infinite;
     font-size: 50px;
-    color: var(--lp-primary);
-
-
+    transition: color 0.3s;
+    cursor: default;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .lp-about {
@@ -508,11 +482,11 @@ body {
 
     0%,
     100% {
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
 
     50% {
-        transform: translateY(-10px);
+        transform: translateX(-50%) translateY(-10px);
     }
 }
 
@@ -542,37 +516,108 @@ body {
 }
 
 /* Responsive */
+/* Responsive Queries */
+@media (max-width: 1100px) {
+    .lp-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lp-card-visual,
+    .lp-card-speed {
+        grid-column: span 2;
+    }
+
+    .lp-about-grid {
+        gap: 3rem;
+    }
+}
+
 @media (max-width: 768px) {
     .lp-navbar {
-        padding: 1.5rem;
+        padding: 1rem 1.5rem;
     }
 
     .lp-nav-links {
         display: none;
     }
 
+    .lp-hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 6rem 1.5rem 8rem;
+    }
+
     .lp-hero-title {
-        font-size: 3rem;
+        font-size: 2.8rem;
+    }
+
+    .lp-hero-subtitle {
+        font-size: 1.1rem;
     }
 
     .lp-features {
-        padding: 4rem 1.5rem;
+        padding: 6rem 1.5rem;
     }
 
-    .lp-about-grid {
+    .lp-grid {
         grid-template-columns: 1fr;
-        gap: 3rem;
+        gap: 1.5rem;
+    }
+
+    .lp-card {
+        grid-column: span 1 !important;
+        grid-row: span 1 !important;
+        margin-top: 0 !important;
+        transform: none !important;
+        min-height: auto !important;
+        padding: 2rem;
+    }
+
+    .lp-section-title {
+        font-size: 2.2rem;
     }
 
     .lp-about {
         padding: 6rem 1.5rem;
     }
 
+    .lp-about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
     .lp-about-title {
         font-size: 2.5rem;
     }
 
+    .lp-about-header {
+        margin-bottom: 3rem;
+    }
+
     .lp-about-sup {
         font-size: 0.8rem;
+    }
+
+    .lp-btn-large {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .lp-cta-group {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        width: 100%;
+    }
+
+    .lp-btn-large,
+    .lp-btn-secondary {
+        width: 80%;
+        max-width: 300px;
+        min-width: unset;
+    }
+
+    .lp-scroll-down {
+        bottom: 1rem;
     }
 }
