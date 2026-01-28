@@ -100,18 +100,24 @@
   border-radius: 50%;
 }
 
-.shape-preview.text {
+.shape-preview.p::before {
+  content: 'P';
+  font-family: serif;
+}
+
+.shape-preview.input {
   background: transparent;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+}
+
+.shape-preview.input::before {
+  content: 'Abc';
+  font-size: 10px;
   color: var(--accent-color);
-  font-size: 16px;
-  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.shape-preview.text::before {
-  content: 'T';
 }
 
 /* Button Previews */
@@ -684,12 +690,26 @@ button:disabled {
   border-radius: 50%;
 }
 
-.canvas-element.text {
+.canvas-element.p {
   background: transparent !important;
 }
 
-.text-content {
-  font-size: 16px;
+.p-content {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  overflow: hidden;
+}
+
+.canvas-element.input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #fff;
+  border-radius: 4px;
+}
+
+.input-element-field {
+  pointer-events: none;
+  padding: 8px 12px;
 }
 
 .canvas-element.button {

@@ -6,7 +6,8 @@ const shapes = [
     { id: 'rectangle', name: 'Rectangle', type: 'rectangle' },
     { id: 'square', name: 'Square', type: 'square' },
     { id: 'circle', name: 'Circle', type: 'circle' },
-    { id: 'text', name: 'Text', type: 'text' },
+    { id: 'p', name: 'Paragraph', type: 'p' },
+    { id: 'input', name: 'Input', type: 'input' },
 ];
 
 // Button components
@@ -126,8 +127,10 @@ function Home() {
 
         let html = '<div class="container">\n';
         elements.forEach((el) => {
-            if (el.type === 'text') {
-                html += `  <p class="element-${el.id}">${el.content || 'Text'}</p>\n`;
+            if (el.type === 'p') {
+                html += `  <p class="element-${el.id}">${el.content || 'Paragraph'}</p>\n`;
+            } else if (el.type === 'input') {
+                html += `  <input type="text" class="element-${el.id}" placeholder="${el.placeholder || 'Enter text...'}">\n`;
             } else if (el.type === 'button') {
                 html += `  <button class="element-${el.id} btn-${el.variant}">${el.content || 'Button'}</button>\n`;
             } else {
@@ -196,9 +199,16 @@ function Home() {
             css += `${indent}  background-color: ${el.backgroundColor};\n`;
         } else if (el.type === 'rectangle' || el.type === 'square') {
             css += `${indent}  background-color: ${el.backgroundColor};\n`;
-        } else if (el.type === 'text') {
+        } else if (el.type === 'p') {
             css += `${indent}  color: ${el.color};\n`;
             css += `${indent}  font-size: ${el.fontSize || 16}px;\n`;
+            css += `${indent}  white-space: pre-wrap;\n`;
+        } else if (el.type === 'input') {
+            css += `${indent}  color: ${el.color};\n`;
+            css += `${indent}  font-size: ${el.fontSize || 16}px;\n`;
+            css += `${indent}  background-color: ${el.backgroundColor};\n`;
+            css += `${indent}  border: ${el.borderWidth || 1}px solid ${el.borderColor || '#ccc'};\n`;
+            css += `${indent}  padding: 8px 12px;\n`;
         } else if (el.type === 'button') {
             css += `${indent}  background-color: ${el.backgroundColor};\n`;
             css += `${indent}  color: ${el.color};\n`;
@@ -247,8 +257,10 @@ function Home() {
                         variant: draggedShape.variant,
                         fontSize: 16,
                     };
-                case 'text':
-                    return { width: 100, height: 30, backgroundColor: 'transparent', color: '#ffffff', content: 'Text', fontSize: 16 };
+                case 'p':
+                    return { width: 200, height: 100, backgroundColor: 'transparent', color: '#ffffff', content: 'Double click to edit text.\nEnter to add new line.', fontSize: 16 };
+                case 'input':
+                    return { width: 200, height: 40, backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff', placeholder: 'Enter text...', fontSize: 16, borderWidth: 1, borderColor: '#ffffff' };
                 case 'square':
                 case 'circle':
                     return { width: 80, height: 80, backgroundColor: '#3498db', color: '#ffffff', content: '' };
@@ -297,8 +309,8 @@ function Home() {
         const startElY = styles.y;
 
         const handleMouseMove = (moveEvent) => {
-            const dx = moveEvent.clientX - startX;
-            const dy = moveEvent.clientY - startY;
+            const dx = (moveEvent.clientX - startX) / zoomLevel;
+            const dy = (moveEvent.clientY - startY) / zoomLevel;
             let newX = startElX + dx;
             let newY = startElY + dy;
 
@@ -393,8 +405,8 @@ function Home() {
         const startElY = styles.y;
 
         const handleMouseMove = (moveEvent) => {
-            const dx = moveEvent.clientX - startX;
-            const dy = moveEvent.clientY - startY;
+            const dx = (moveEvent.clientX - startX) / zoomLevel;
+            const dy = (moveEvent.clientY - startY) / zoomLevel;
 
             let newWidth = startWidth;
             let newHeight = startHeight;
@@ -456,7 +468,7 @@ function Home() {
 
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
-    }, [elements, getElementStyles, updateElementForScreen]);
+    }, [elements, getElementStyles, updateElementForScreen, zoomLevel]);
 
     // Handle canvas click to deselect
     const handleCanvasClick = () => {
@@ -543,7 +555,7 @@ function Home() {
             top: styles.y,
             width: styles.width,
             height: styles.height,
-            backgroundColor: element.type === 'text' ? 'transparent' :
+            backgroundColor: element.type === 'transparent' ? 'transparent' :
                 (element.variant === 'outline' ? 'transparent' : styles.backgroundColor),
             color: styles.color,
             border: element.variant === 'outline'
@@ -552,7 +564,8 @@ function Home() {
             borderRadius: element.type === 'circle' ? '50%' : `${styles.borderRadius || 0}px`,
             opacity: element.locked ? 0.7 : 1,
             transform: styles.rotation ? `rotate(${styles.rotation}deg)` : undefined,
-            fontSize: (element.type === 'text' || element.type === 'button') ? `${styles.fontSize || 16}px` : undefined,
+            fontSize: (element.type === 'p' || element.type === 'input' || element.type === 'button') ? `${styles.fontSize || 16}px` : undefined,
+            whiteSpace: element.type === 'p' ? 'pre-wrap' : undefined,
         };
 
         return (
@@ -563,8 +576,39 @@ function Home() {
                 onClick={(e) => handleElementClick(e, element)}
                 onMouseDown={(e) => !element.locked && handleElementDrag(e, element.id)}
             >
-                {element.type === 'text' && (
-                    <span className="text-content">{element.content}</span>
+                {element.type === 'p' && (
+                    <div
+                        className="p-content"
+                        contentEditable={!element.locked}
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => updateElementProperty('content', e.target.innerText)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                // Default behavior for contentEditable is usually fine, 
+                                // but we want to make sure it's clear
+                            }
+                            e.stopPropagation();
+                        }}
+                    >
+                        {element.content}
+                    </div>
+                )}
+                {element.type === 'input' && (
+                    <input
+                        type="text"
+                        className="input-element-field"
+                        placeholder={element.placeholder}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'inherit',
+                            fontSize: 'inherit',
+                            padding: 'inherit'
+                        }}
+                        readOnly
+                    />
                 )}
                 {isButton && (
                     <span className="button-content">{element.content}</span>
@@ -665,21 +709,44 @@ function Home() {
                         </div>
 
                         {/* Text Content Editing */}
-                        {(selectedElementData.type === 'text' || selectedElementData.type === 'button') && (
+                        {(selectedElementData.type === 'p' || selectedElementData.type === 'button') && (
                             <div className="property-group">
                                 <label>Text Content</label>
+                                {selectedElementData.type === 'p' ? (
+                                    <textarea
+                                        className="text-content-input"
+                                        style={{ minHeight: '80px', resize: 'vertical' }}
+                                        value={selectedElementData.content || ''}
+                                        onChange={(e) => updateElementProperty('content', e.target.value)}
+                                        disabled={selectedElementData.locked}
+                                    />
+                                ) : (
+                                    <input
+                                        type="text"
+                                        className="text-content-input"
+                                        value={selectedElementData.content || ''}
+                                        onChange={(e) => updateElementProperty('content', e.target.value)}
+                                        disabled={selectedElementData.locked}
+                                    />
+                                )}
+                            </div>
+                        )}
+
+                        {selectedElementData.type === 'input' && (
+                            <div className="property-group">
+                                <label>Placeholder</label>
                                 <input
                                     type="text"
                                     className="text-content-input"
-                                    value={selectedElementData.content || ''}
-                                    onChange={(e) => updateElementProperty('content', e.target.value)}
+                                    value={selectedElementData.placeholder || ''}
+                                    onChange={(e) => updateElementProperty('placeholder', e.target.value)}
                                     disabled={selectedElementData.locked}
                                 />
                             </div>
                         )}
 
                         {/* Text Color Picker */}
-                        {(selectedElementData.type === 'text' || selectedElementData.type === 'button') && (
+                        {(selectedElementData.type === 'p' || selectedElementData.type === 'input' || selectedElementData.type === 'button') && (
                             <div className="property-group">
                                 <label>Text Color</label>
                                 <div className="color-input-row">
@@ -702,7 +769,7 @@ function Home() {
                         )}
 
                         {/* Font Size Control */}
-                        {(selectedElementData.type === 'text' || selectedElementData.type === 'button') && (
+                        {(selectedElementData.type === 'p' || selectedElementData.type === 'input' || selectedElementData.type === 'button') && (
                             <div className="property-group">
                                 <label>Font Size</label>
                                 <div className="slider-input">
