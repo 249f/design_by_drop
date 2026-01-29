@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
-import { Github, Instagram, Linkedin, Facebook, MousePointer, Code, Save, Lock, Zap, Tablet } from 'lucide-react';
+import { Github, Instagram, Linkedin, Facebook, MousePointer, Code, Save, Lock, Zap, Tablet, Download } from 'lucide-react';
 
 
 const LandingPage = () => {
@@ -51,13 +51,13 @@ const LandingPage = () => {
                         <div className="lp-card-icon"><MousePointer size={24} /></div>
                         <h3>Visual Editing</h3>
                         <p>Drag, drop, resize, and style elements with complete freedom. No coding knowledge required to visualize ideas. Experience the power of absolute positioning paired with intuitive transform controls.</p>
-                        <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>Whether you're building a simple hero section or a complex multi-layered interface, our visual engine ensures what you see is exactly what you get in the final code.</p>
+                        <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>Whether you're building a simple design or a complex multi layered interface, DesignByDrop visual engine ensures what you see is exactly what you get in the final code.</p>
                     </div>
 
                     <div className="lp-card lp-card-responsive">
                         <div className="lp-card-icon"><Tablet size={24} /></div>
                         <h3>Responsive Design</h3>
-                        <p>Switch between Desktop, Tablet, and Mobile views effortlessly.</p>
+                        <p>Switch between Desktop, Tablet, and Mobile views effortlessly (coming soon).</p>
                     </div>
 
                     <div className="lp-card lp-card-code">
@@ -83,6 +83,12 @@ const LandingPage = () => {
                         <div className="lp-card-icon"><Zap size={24} /></div>
                         <h3>Fast Workflow</h3>
                         <p>with the easy side panel you can use shortcuts, quick color palettes, and rapid element creation. Spend less time in coding and more time designing.</p>
+                    </div>
+
+                    <div className="lp-card lp-card-download">
+                        <div className="lp-card-icon"><Download size={24} /></div>
+                        <h3>Download file</h3>
+                        <p>Download your design as a ready to use HTML file.</p>
                     </div>
                 </div>
             </section>
