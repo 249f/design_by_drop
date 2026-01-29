@@ -29,7 +29,7 @@ const DesktopOnly = ({ children }) => {
                     </p>
                     <Link to="/" className="do-back-link">
                         <ArrowLeft size={18} />
-                        Back to Home
+                        Go Back
                     </Link>
                 </div>
             </div>
