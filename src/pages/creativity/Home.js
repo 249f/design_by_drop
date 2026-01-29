@@ -694,19 +694,7 @@ function Home() {
                         />
                         <label htmlFor="showAlignmentHelpers" className="checkbox-label">Alignment Helper</label>
                     </div>
-                    {/* 8-Point Resizing Toggle */}
-                    <div className="property-group">
-                        <div className="checkbox-row">
-                            <input
-                                type="checkbox"
-                                id="useEightJoints"
-                                checked={selectedElementData.useEightJoints || false}
-                                onChange={(e) => updateElementProperty('useEightJoints', e.target.checked)}
-                                disabled={selectedElementData.locked}
-                            />
-                            <label htmlFor="useEightJoints" className="checkbox-label">Use 8 Resize Joints</label>
-                        </div>
-                    </div>
+
 
 
                 </div>
@@ -817,6 +805,20 @@ function Home() {
                                     disabled={selectedElementData.locked}
                                 />
                                 <span>{getElementStyles(selectedElementData).rotation || 0}°</span>
+                            </div>
+                        </div>
+
+                        {/* 8-Point Resizing Toggle */}
+                        <div className="property-group">
+                            <div className="checkbox-row">
+                                <input
+                                    type="checkbox"
+                                    id="useEightJoints"
+                                    checked={selectedElementData.useEightJoints || false}
+                                    onChange={(e) => updateElementProperty('useEightJoints', e.target.checked)}
+                                    disabled={selectedElementData.locked}
+                                />
+                                <label htmlFor="useEightJoints" className="checkbox-label">Use 8 Resize Joints</label>
                             </div>
                         </div>
 
