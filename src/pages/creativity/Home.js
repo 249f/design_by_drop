@@ -183,6 +183,7 @@ function Home() {
         css += `${indent}  top: ${el.y}px;\n`;
         css += `${indent}  width: ${el.width}px;\n`;
         css += `${indent}  height: ${el.height}px;\n`;
+        css += `${indent}  box-sizing: border-box;\n`;
 
         // Rotation
         if (el.rotation && el.rotation !== 0) {
@@ -600,6 +601,7 @@ ${generateHTML()}
             transform: styles.rotation ? `rotate(${styles.rotation}deg)` : undefined,
             fontSize: (element.type === 'p' || element.type === 'input' || element.type === 'button') ? `${styles.fontSize || 16}px` : undefined,
             whiteSpace: element.type === 'p' ? 'pre-wrap' : undefined,
+            boxSizing: 'border-box',
         };
 
         return (
@@ -639,7 +641,8 @@ ${generateHTML()}
                             border: 'none',
                             color: 'inherit',
                             fontSize: 'inherit',
-                            padding: 'inherit'
+                            padding: '8px 12px',
+                            boxSizing: 'border-box'
                         }}
                         readOnly
                     />
