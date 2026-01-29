@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
+import { Save } from 'lucide-react';
 
 // Basic shape components
 const shapes = [
@@ -548,6 +549,34 @@ function Home() {
             setSelectedElement(null);
             elementIdRef.current = 1;
         }
+    };
+
+    // Download as HTML file
+    const downloadHTML = () => {
+        const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design by Drop Export</title>
+    <style>
+${generateCSS()}
+    </style>
+</head>
+<body>
+${generateHTML()}
+</body>
+</html>`;
+
+        const blob = new Blob([fullHTML], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'design.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     };
 
     // Render element on canvas
@@ -1127,6 +1156,28 @@ function Home() {
                         <pre className="code-output">
                             <code>{generateCSS()}</code>
                         </pre>
+                    </div>
+
+                    <div className="code-actions" style={{ marginTop: 'auto', paddingTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                            className="download-btn"
+                            onClick={downloadHTML}
+                            style={{
+                                padding: '10px 16px',
+                                background: '#8e00b1',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontSize: '0.9rem',
+                                fontWeight: '500',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px'
+                            }}
+                        >
+                            <Save size={16} /> Download as a HTML file
+                        </button>
                     </div>
                 </aside>
             )}
