@@ -48,10 +48,10 @@ function Home() {
     const [selectedElement, setSelectedElement] = useState(null);
     const [draggedShape, setDraggedShape] = useState(null);
     const [isResizing, setIsResizing] = useState(false);
-    const [canvasBackground, setCanvasBackground] = useState(savedState?.canvasBackground || '#1e1e2f');
+    const [canvasBackground, setCanvasBackground] = useState(savedState?.canvasBackground || '#ffffff');
     const [activeScreen, setActiveScreen] = useState(savedState?.activeScreen || 'desktop');
     const [customSize, setCustomSize] = useState(savedState?.customSize || { width: 1200, height: 800 });
-    const [zoomLevel, setZoomLevel] = useState(1);
+    const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
 
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
@@ -252,15 +252,17 @@ function Home() {
                         height: 40,
                         backgroundColor: draggedShape.variant === 'primary' ? '#3498db' :
                             draggedShape.variant === 'secondary' ? '#6c757d' : 'transparent',
-                        color: draggedShape.variant === 'outline' ? '#3498db' : '#ffffff',
+                        color: draggedShape.variant === 'outline' ? '#000000' : '#ffffff',
+                        borderColor: '#000000',
+                        borderWidth: draggedShape.variant === 'outline' ? 2 : 0,
                         content: 'Button',
                         variant: draggedShape.variant,
                         fontSize: 16,
                     };
                 case 'p':
-                    return { width: 200, height: 100, backgroundColor: 'transparent', color: '#ffffff', content: 'delete this text and start typing :)', fontSize: 16 };
+                    return { width: 200, height: 100, backgroundColor: 'transparent', color: '#000000', content: 'delete this text and start typing :)', fontSize: 16 };
                 case 'input':
-                    return { width: 200, height: 40, backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff', placeholder: 'Enter text...', fontSize: 16, borderWidth: 1, borderColor: '#ffffff' };
+                    return { width: 200, height: 40, backgroundColor: 'rgba(255,255,255,0.1)', color: '#000000', placeholder: 'Enter text...', fontSize: 16, borderWidth: 1, borderColor: '#000000' };
                 case 'square':
                 case 'circle':
                     return { width: 80, height: 80, backgroundColor: '#3498db', color: '#ffffff', content: '' };
@@ -539,6 +541,7 @@ function Home() {
     const clearWorkspace = () => {
         if (window.confirm('Are you sure you want to clear the workspace?')) {
             setElements([]);
+            setCanvasBackground('#ffffff');
             setResponsiveStyles({ desktop: {}, tablet: {}, mobile: {} });
             setSelectedElement(null);
             elementIdRef.current = 1;
