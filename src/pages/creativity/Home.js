@@ -49,8 +49,8 @@ function Home() {
     const [draggedShape, setDraggedShape] = useState(null);
     const [isResizing, setIsResizing] = useState(false);
     const [canvasBackground, setCanvasBackground] = useState(savedState?.canvasBackground || '#ffffff');
-    const [activeScreen, setActiveScreen] = useState(savedState?.activeScreen || 'desktop');
-    const [customSize, setCustomSize] = useState(savedState?.customSize || { width: 1200, height: 800 });
+    const [activeScreen /*, setActiveScreen */] = useState(savedState?.activeScreen || 'desktop');
+    const [customSize /*, setCustomSize */] = useState(savedState?.customSize || { width: 1200, height: 800 });
     const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
 
@@ -153,6 +153,7 @@ function Home() {
         });
 
         // Media queries for tablet and mobile
+        /* Commented out as responsive features are under development
         ['tablet', 'mobile'].forEach(screen => {
             const preset = screenPresets.find(s => s.id === screen);
             const overrides = responsiveStyles[screen] || {};
@@ -168,6 +169,7 @@ function Home() {
                 css += `}\n`;
             }
         });
+        */
 
         return css;
     };
@@ -961,6 +963,7 @@ function Home() {
                 {/* Toolbar */}
                 <div className="canvas-toolbar">
                     {/* Screen Size Presets */}
+                    {/* Screen Size Presets - Commented out under development
                     <div className="screen-presets">
                         {screenPresets.map(preset => (
                             <button
@@ -974,14 +977,12 @@ function Home() {
                         ))}
                     </div>
 
-                    {/* Responsive indicator */}
                     {activeScreen !== 'desktop' && activeScreen !== 'custom' && (
                         <span className="responsive-indicator">
                             Editing {activeScreen} styles
                         </span>
                     )}
 
-                    {/* Custom Size Inputs */}
                     {activeScreen === 'custom' && (
                         <div className="custom-size-inputs">
                             <input
@@ -997,6 +998,7 @@ function Home() {
                             />
                         </div>
                     )}
+                    */}
 
                     {/* Background Color */}
                     <div className="bg-color-control">
