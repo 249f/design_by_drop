@@ -885,21 +885,7 @@ ${generateHTML()}
                             </div>
                         </div>
 
-                        {/* Quick Colors
-                        <div className="property-group">
-                            <label>Q Colors</label>
-                            <div className="quick-colors">
-                                {['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#ecf0f1'].map(color => (
-                                    <button
-                                        key={color}
-                                        className="quick-color-btn"
-                                        style={{ backgroundColor: color }}
-                                        onClick={() => !selectedElementData.locked && updateElementProperty('backgroundColor', color)}
-                                        disabled={selectedElementData.locked}
-                                    />
-                                ))}
-                            </div>
-                        </div> */}
+
 
                         {/* Border Controls */}
                         <div className="property-group">
