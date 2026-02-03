@@ -548,6 +548,7 @@ function Home() {
         if (window.confirm('Are you sure you want to clear the workspace?')) {
             setElements([]);
             setCanvasBackground('#ffffff');
+            setCanvasHeight(800);
             setResponsiveStyles({ desktop: {}, tablet: {}, mobile: {} });
             setSelectedElement(null);
             elementIdRef.current = 1;
