@@ -98,18 +98,6 @@ body {
     overflow: hidden;
 }
 
-.lp-hero::before {
-    content: '';
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(142, 0, 177, 0.3) 0%, transparent 70%);
-    filter: blur(80px);
-    z-index: 0;
-}
 
 .lp-hero-content {
     position: relative;
@@ -117,18 +105,7 @@ body {
     max-width: 900px;
 }
 
-.lp-hero-badge {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: rgba(142, 0, 177, 0.1);
-    border: 1px solid rgba(142, 0, 177, 0.3);
-    border-radius: 99px;
-    color: var(--lp-accent);
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 2rem;
-    animation: fadeInDown 0.8s ease-out;
-}
+
 
 .lp-hero-title {
     font-size: 4rem;
