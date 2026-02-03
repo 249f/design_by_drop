@@ -15,6 +15,14 @@
 body {
     margin: 0;
     overflow-x: hidden;
+
+
+}
+
+* {
+    ::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .landing-container {
@@ -24,6 +32,7 @@ body {
     font-family: 'Inter', 'Segoe UI', sans-serif;
     overflow-x: hidden;
 }
+
 
 /* Navbar */
 .lp-navbar {
@@ -89,20 +98,25 @@ body {
     height: 100vh;
     min-height: 600px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    text-align: center;
-    padding: 0 2rem;
+    padding: 0;
+    max-width: 1400px;
+    margin: 0 auto;
     position: relative;
     overflow: hidden;
+    gap: 2rem;
 }
 
 
 .lp-hero-content {
     position: relative;
     z-index: 1;
-    max-width: 900px;
+    max-width: 600px;
+    text-align: left;
+    padding: 4rem;
+    padding-top: 120px;
 }
 
 
@@ -128,9 +142,9 @@ body {
     font-size: 1.25rem;
     color: var(--lp-text-muted);
     margin-bottom: 3rem;
-    max-width: 620px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     line-height: 1.6;
     animation: fadeInUp 0.8s ease-out 0.4s backwards;
 }
@@ -138,7 +152,7 @@ body {
 .lp-cta-group {
     display: flex;
     gap: 1.5rem;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     animation: fadeInUp 0.8s ease-out 0.6s backwards;
 }
@@ -167,6 +181,27 @@ body {
 .lp-btn-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
+}
+
+.hero-video {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* This creates a smooth fade into the background */
+    -webkit-mask-image: radial-gradient(circle at right, black 40%, transparent 99%);
+    mask-image: radial-gradient(circle at right, black 40%, transparent 99%);
+}
+
+.hero-video video {
+    width: 100%;
+    margin-top: 15vh;
+    padding: 0;
+    height: auto;
+    /* border-radius: 24px; */
+    object-fit: cover;
+    box-shadow: 0 0 50px rgba(142, 0, 177, 0.2);
 }
 
 /* Features Section */
@@ -522,10 +557,37 @@ body {
         height: auto;
         min-height: 100vh;
         padding: 6rem 1.5rem 8rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 4rem;
     }
 
-    .lp-hero-title {
-        font-size: 2.8rem;
+    .lp-hero-content {
+        max-width: 100%;
+        text-align: center;
+        padding: 2rem 1.5rem;
+    }
+
+    .lp-hero h1 {
+        font-size: 2.3rem;
+    }
+
+    .hero-video {
+        width: 120%;
+        margin-top: 0;
+
+        /* This creates a smooth fade into the background */
+        -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 99%);
+        mask-image: radial-gradient(circle at center, black 40%, transparent 99%);
+
+
+
+    }
+
+
+    .hero-video video {
+        margin-top: 0;
+        width: 100%;
     }
 
     .lp-hero-subtitle {

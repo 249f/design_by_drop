@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
 import { Github, Instagram, Linkedin, Facebook, MousePointer, Code, Save, Lock, Zap, Tablet, Download } from 'lucide-react';
-
+import heroVideo from '../assets/video/heroVideo.webm';
 
 const LandingPage = () => {
     return (
@@ -24,7 +24,7 @@ const LandingPage = () => {
 
                     <h1 className="lp-hero-title">
                         <span>I Hate Coding Syntax</span><br />
-                        This is why I created DesignByDrop
+                        So I created DesignByDrop
                     </h1>
                     <p className="lp-hero-subtitle">
                         a free open source tool for visual web design giving you a ready to copy code, trying to make web design easier and more fun :)
@@ -33,6 +33,9 @@ const LandingPage = () => {
                         <Link to="/creativity/home" className="lp-btn-primary lp-btn-large">Start Creating</Link>
                         <a href="#features" className="lp-btn-secondary">Learn More</a>
                     </div>
+                </div>
+                <div className="hero-video">
+                    <video src={heroVideo} autoPlay loop muted playsInline />
                 </div>
                 <div className="lp-scroll-down">
                     <span>︾</span>
