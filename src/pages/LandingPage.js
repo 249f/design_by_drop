@@ -27,7 +27,7 @@ const LandingPage = () => {
                         This is why I created DesignByDrop
                     </h1>
                     <p className="lp-hero-subtitle">
-                        done with vibe coding era now its time to vibe designing, the free open source tool for visual web design giving you a ready to copy code, say goodbye to coding syntax and hello to visual design :)
+                        a free open source tool for visual web design giving you a ready to copy code, trying to make web design easier and more fun :)
                     </p>
                     <div className="lp-cta-group">
                         <Link to="/creativity/home" className="lp-btn-primary lp-btn-large">Start Creating</Link>
