@@ -1039,7 +1039,7 @@ ${generateHTML()}
 
                     {/* Canvas Height Control */}
                     <div className="height-control">
-                        <label>Height:</label>
+                        <label>Page Height:</label>
                         <input
                             type="number"
                             className="height-input"
