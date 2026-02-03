@@ -585,6 +585,43 @@ button:disabled {
   border-color: var(--accent-color);
 }
 
+/* Height Control */
+.height-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid var(--border-color);
+}
+
+.height-control label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.height-input {
+  width: 70px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #81d4fa;
+  border-radius: 6px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.height-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.height-control span {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
 /* Zoom Controls */
 .zoom-controls {
   display: flex;
@@ -639,7 +676,7 @@ button:disabled {
 .canvas-wrapper {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 20px;
   overflow: auto;

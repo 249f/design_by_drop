@@ -52,6 +52,7 @@ function Home() {
     const [canvasBackground, setCanvasBackground] = useState(savedState?.canvasBackground || '#ffffff');
     const [activeScreen /*, setActiveScreen */] = useState(savedState?.activeScreen || 'desktop');
     const [customSize /*, setCustomSize */] = useState(savedState?.customSize || { width: 1200, height: 800 });
+    const [canvasHeight, setCanvasHeight] = useState(savedState?.canvasHeight || 800);
     const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
 
@@ -75,11 +76,12 @@ function Home() {
             canvasBackground,
             activeScreen,
             customSize,
+            canvasHeight,
             responsiveStyles,
             nextId: elementIdRef.current,
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
-    }, [elements, canvasBackground, activeScreen, customSize, responsiveStyles]);
+    }, [elements, canvasBackground, activeScreen, customSize, canvasHeight, responsiveStyles]);
 
     // Get current screen size
     const getCurrentScreenSize = () => {
@@ -145,7 +147,7 @@ function Home() {
     // Generate CSS code from elements with media queries
     const generateCSS = () => {
         let css = `body {\n  background-color: ${canvasBackground};\n}\n\n`;
-        css += `.container {\n  position: relative;\n  width: 100%;\n  max-width: ${screenSize.width}px;\n  min-height: ${screenSize.height}px;\n  margin: 0 auto;\n}\n\n`;
+        css += `.container {\n  position: relative;\n  width: 100%;\n  max-width: ${screenSize.width}px;\n  min-height: ${canvasHeight}px;\n  margin: 0 auto;\n}\n\n`;
 
         // Base styles (desktop)
         elements.forEach((el) => {
@@ -1048,6 +1050,20 @@ ${generateHTML()}
                         />
                     </div>
 
+                    {/* Canvas Height Control */}
+                    <div className="height-control">
+                        <label>Height:</label>
+                        <input
+                            type="number"
+                            className="height-input"
+                            value={canvasHeight}
+                            onChange={(e) => setCanvasHeight(parseInt(e.target.value) || 800)}
+                            min="400"
+                            step="100"
+                        />
+                        <span>px</span>
+                    </div>
+
                     {/* Zoom Controls */}
                     <div className="zoom-controls">
                         <button
@@ -1088,9 +1104,9 @@ ${generateHTML()}
                         className="canvas-zoom-container"
                         style={{
                             transform: `scale(${zoomLevel})`,
-                            transformOrigin: 'center center',
+                            transformOrigin: 'top center',
                             width: screenSize.width,
-                            height: screenSize.height,
+                            height: canvasHeight,
                         }}
                     >
                         <div
@@ -1098,7 +1114,7 @@ ${generateHTML()}
                             className="canvas"
                             style={{
                                 width: screenSize.width,
-                                height: screenSize.height,
+                                height: canvasHeight,
                                 backgroundColor: canvasBackground
                             }}
                             onDragOver={handleDragOver}
