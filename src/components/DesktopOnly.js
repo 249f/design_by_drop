@@ -25,7 +25,7 @@ const DesktopOnly = ({ children }) => {
                     <h1 className="do-title">Desktop Required</h1>
                     <p className="do-message">
                         You are using a mobile device, DesignByDrop is built for desktop use.
-                        Please switch to a computer to start creating :)
+                        Please switch to a computer or laptop to start creating :)
                     </p>
                     <Link to="/" className="do-back-link">
                         <ArrowLeft size={18} />
