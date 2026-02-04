@@ -122,7 +122,7 @@ body {
 
 
 .lp-hero-title {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
@@ -136,7 +136,7 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 4rem;
+    /* font-size: 4rem; */
 
 
 }
