@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Home } from './pages/creativity';
+import { Home, Settings } from './pages/creativity';
 import LandingPage from './pages/LandingPage';
 import DesktopOnly from './components/DesktopOnly';
 import { Analytics } from '@vercel/analytics/react';
@@ -21,6 +21,11 @@ function App() {
                 <DesktopOnly>
                   <Home />
                 </DesktopOnly>
+              </ProtectedRoute>
+            } />
+            <Route path="/creativity/settings" element={
+              <ProtectedRoute>
+                <Settings />
               </ProtectedRoute>
             } />
             <Route path="*" element={<Navigate to="/" replace />} />

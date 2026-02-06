@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
-import { Save } from 'lucide-react';
+import { Save, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 // import { templates } from '../../components/templates';
 
 // Basic shape components
@@ -45,7 +46,7 @@ function Home() {
         }
         return null;
     };
-
+    const navigate = useNavigate();
     const savedState = loadFromStorage();
 
     const [elements, setElements] = useState(savedState?.elements || []);
@@ -1133,12 +1134,19 @@ ${generateHTML()}
                         </button>
                     </div>
 
-                    {/* See Code Button */}
                     <button
                         className={`see-code-btn ${showCodePanel ? 'active' : ''}`}
                         onClick={() => setShowCodePanel(!showCodePanel)}
                     >
                         {showCodePanel ? '✕ Hide Code' : '{ } See Code'}
+                    </button>
+                    <button
+                        className="see-code-btn"
+                        onClick={() => navigate('/creativity/settings')}
+                        style={{ marginLeft: '10px', padding: '10px' }}
+                        title="Settings"
+                    >
+                        <Settings size={18} />
                     </button>
                 </div>
 
