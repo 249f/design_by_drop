@@ -1081,3 +1081,13 @@ button:disabled {
 ::-webkit-scrollbar-thumb:hover {
   background: #8e00b1;
 }
+
+/* Settings Button */
+.settings-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}

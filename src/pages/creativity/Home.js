@@ -1133,7 +1133,7 @@ ${generateHTML()}
                             Reset
                         </button>
                     </div>
-
+                    {/* See code and settings buttons */}
                     <button
                         className={`see-code-btn ${showCodePanel ? 'active' : ''}`}
                         onClick={() => setShowCodePanel(!showCodePanel)}
@@ -1141,12 +1141,12 @@ ${generateHTML()}
                         {showCodePanel ? '✕ Hide Code' : '{ } See Code'}
                     </button>
                     <button
-                        className="see-code-btn"
+                        className="settings-btn"
                         onClick={() => navigate('/creativity/settings')}
-                        style={{ marginLeft: '10px', padding: '10px' }}
+
                         title="Settings"
                     >
-                        <Settings size={18} />
+                        <Settings size={25} />
                     </button>
                 </div>
 
