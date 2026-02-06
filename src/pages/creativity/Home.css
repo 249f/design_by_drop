@@ -22,6 +22,7 @@
   height: 100vh;
   overflow: hidden;
   background: var(--main-color);
+
   color: var(--text-primary);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
@@ -726,6 +727,7 @@ button:disabled {
 .canvas-wrapper {
   flex: 1;
   display: flex;
+  background-color: #101010;
   align-items: flex-start;
   justify-content: center;
   padding: 20px;

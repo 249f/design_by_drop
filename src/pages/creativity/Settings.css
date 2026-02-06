@@ -1,6 +1,6 @@
 .settings-container {
     min-height: 100vh;
-    background-color: var(--lp-bg, #0a0a0b);
+    background-color: black;
     color: white;
     padding: 40px 20px;
     display: flex;
@@ -98,7 +98,7 @@
 }
 
 .save-btn {
-    background: var(--lp-accent, #8e00b1);
+    background: #8e00b1;
     color: white;
     border: none;
     padding: 12px 24px;
@@ -128,9 +128,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: transparent;
-    border: 1px solid rgba(244, 67, 54, 0.3);
-    color: #f44336;
+    background: rgb(30, 30, 30);
+    border: none;
+    color: #e8e8e8;
     padding: 12px 24px;
     border-radius: 10px;
     font-weight: 600;
@@ -139,8 +139,8 @@
 }
 
 .logout-btn:hover {
-    background: rgba(244, 67, 54, 0.05);
-    border-color: #f44336;
+    box-shadow: 0 4px 12px rgba(142, 0, 177, 0.3);
+    scale: 1.01;
 }
 
 .status-msg {

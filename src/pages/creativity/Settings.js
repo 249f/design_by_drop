@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { ArrowLeft, User, Lock, LogOut } from 'lucide-react';
 import './Settings.css';
 
+
 const Settings = () => {
     const { user, updateName, updatePassword, logout } = useAuth();
     const navigate = useNavigate();
@@ -58,6 +59,7 @@ const Settings = () => {
     };
 
     return (
+
         <div className="settings-container">
             <div className="settings-card">
                 <div className="settings-header">
