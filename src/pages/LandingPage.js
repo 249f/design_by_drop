@@ -30,7 +30,9 @@ const LandingPage = () => {
                         a free open source tool for visual web design giving you a ready to copy code, trying to make web design easier and more fun :)
                     </p>
                     <div className="lp-cta-group">
-                        <Link to="/creativity/home" className="lp-btn-primary lp-btn-large">Start Creating</Link>
+                        <Link to="/creativity/home" className="lp-btn-primary lp-btn-large">
+                            Start Creating
+                        </Link>
                         <a href="#features" className="lp-btn-secondary">Learn More</a>
                     </div>
                 </div>
