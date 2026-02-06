@@ -30,7 +30,9 @@ const LandingPage = () => {
                         a free open source tool for visual web design giving you a ready to copy code, trying to make web design easier and more fun :)
                     </p>
                     <div className="lp-cta-group">
-                        <Link to="/creativity/home" className="lp-btn-primary lp-btn-large">Start Creating</Link>
+                        <Link to="/creativity/home" className="lp-btn-primary lp-btn-large">
+                            Start Creating
+                        </Link>
                         <a href="#features" className="lp-btn-secondary">Learn More</a>
                     </div>
                 </div>
@@ -111,7 +113,7 @@ const LandingPage = () => {
                                 Hi, I'm <strong>ALi Abdellatif</strong>, a Sudanese software engineering student who believes that web development should be easier and more fun than it is today, not just boring syntax. For years there was a question in my mind, why we are still writing code to build software, with all this technology and people still write code to build software? The Vibe Coding hype proved that AI can help write code, but the Vibe Designing era is what i'm aiming for.
                             </p>
                             <p>
-                                DesignByDrop is how i'm trying to see my knowledge limits, and right now it's just the beginning with the current beta version.
+                                DesignByDrop is how i'm trying to see the limits of my abilities, putting my knowledge to the test, right now it's just the beginning with the current beta version.
                             </p>
                         </div>
 

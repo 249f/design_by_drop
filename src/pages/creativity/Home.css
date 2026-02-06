@@ -22,6 +22,7 @@
   height: 100vh;
   overflow: hidden;
   background: var(--main-color);
+
   color: var(--text-primary);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
@@ -43,6 +44,54 @@
 .sidebar-section {
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.template-category {
+  margin-bottom: 8px;
+}
+
+.template-category-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.template-category-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.category-arrow {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.category-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+.template-category-title {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0;
+  padding-left: 0;
+  user-select: none;
+}
+
+.template-item {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px;
+}
+
+.template-name {
+  font-size: 0.8rem;
 }
 
 .sidebar-title {
@@ -678,6 +727,7 @@ button:disabled {
 .canvas-wrapper {
   flex: 1;
   display: flex;
+  background-color: #101010;
   align-items: flex-start;
   justify-content: center;
   padding: 20px;
@@ -1032,4 +1082,14 @@ button:disabled {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #8e00b1;
+}
+
+/* Settings Button */
+.settings-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
-import { Save } from 'lucide-react';
+import { Save, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+// import { templates } from '../../components/templates';
 
 // Basic shape components
 const shapes = [
@@ -17,6 +19,8 @@ const buttons = [
     { id: 'btn-secondary', name: 'Secondary', type: 'button', variant: 'secondary' },
     { id: 'btn-outline', name: 'Outline', type: 'button', variant: 'outline' },
 ];
+
+
 
 // Screen presets
 const screenPresets = [
@@ -42,7 +46,7 @@ function Home() {
         }
         return null;
     };
-
+    const navigate = useNavigate();
     const savedState = loadFromStorage();
 
     const [elements, setElements] = useState(savedState?.elements || []);
@@ -55,6 +59,7 @@ function Home() {
     const [canvasHeight, setCanvasHeight] = useState(savedState?.canvasHeight || 800);
     const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
+    // const [expandedCategory, setExpandedCategory] = useState(null);
 
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
@@ -295,6 +300,19 @@ function Home() {
         setSelectedElement(newElement.id);
         setDraggedShape(null);
     };
+
+    // Add template to canvas
+    // const addTemplateToCanvas = (templateElements) => {
+    //     if (!templateElements || !Array.isArray(templateElements)) return;
+
+    //     // Clone elements to avoid reference issues
+    //     const newElements = templateElements.map(el => ({
+    //         ...el,
+    //         id: el.id + '_' + Date.now() + '_' + Math.floor(Math.random() * 1000) // Ensure unique IDs
+    //     }));
+
+    //     setElements(prev => [...prev, ...newElements]);
+    // };
 
     // Handle element selection
     const handleElementClick = (e, element) => {
@@ -684,7 +702,47 @@ ${generateHTML()}
         <div className="home-container">
             {/* Left Sidebar */}
             <aside className="sidebar">
-                {/* Shapes */}
+                {/* Ready Elements (Templates) */}
+                {/* <div className="sidebar-section">
+                    <h2 className="sidebar-title">Ready Elements</h2>
+                    {Object.entries(templates).map(([key, category]) => (
+                        <div key={key} className="template-category">
+                            <div
+                                className="template-category-header"
+                                onClick={() => setExpandedCategory(expandedCategory === key ? null : key)}
+                            >
+                                <span className={`category-arrow ${expandedCategory === key ? 'expanded' : ''}`}>▶</span>
+                                <h3 className="template-category-title">{category.name}</h3>
+                            </div>
+
+                            {expandedCategory === key && (
+                                <div className="shapes-list">
+                                    {category.items.map((item) => (
+                                        <div
+                                            key={item.id}
+                                            className="shape-item template-item"
+                                            onClick={() => addTemplateToCanvas(item.elements)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <div
+                                                className="shape-preview"
+                                                style={{
+                                                    background: item.preview,
+                                                    borderRadius: 4,
+                                                    width: '100%',
+                                                    height: 40
+                                                }}
+                                            />
+                                            <span className="template-name">{item.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div> */}
+
+                {/* Elements */}
                 <div className="sidebar-section">
                     <h2 className="sidebar-title">Shapes</h2>
                     <div className="shapes-list">
@@ -1075,13 +1133,20 @@ ${generateHTML()}
                             Reset
                         </button>
                     </div>
-
-                    {/* See Code Button */}
+                    {/* See code and settings buttons */}
                     <button
                         className={`see-code-btn ${showCodePanel ? 'active' : ''}`}
                         onClick={() => setShowCodePanel(!showCodePanel)}
                     >
                         {showCodePanel ? '✕ Hide Code' : '{ } See Code'}
+                    </button>
+                    <button
+                        className="settings-btn"
+                        onClick={() => navigate('/creativity/settings')}
+
+                        title="Settings"
+                    >
+                        <Settings size={25} />
                     </button>
                 </div>
 
