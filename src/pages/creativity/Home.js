@@ -58,6 +58,7 @@ function Home() {
     const [canvasHeight, setCanvasHeight] = useState(savedState?.canvasHeight || 800);
     const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
+    const [expandedCategory, setExpandedCategory] = useState(null);
 
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
@@ -705,28 +706,37 @@ ${generateHTML()}
                     <h2 className="sidebar-title">Ready Elements</h2>
                     {Object.entries(templates).map(([key, category]) => (
                         <div key={key} className="template-category">
-                            <h3 className="template-category-title">{category.name}</h3>
-                            <div className="shapes-list">
-                                {category.items.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="shape-item template-item"
-                                        onClick={() => addTemplateToCanvas(item.elements)}
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        <div
-                                            className="shape-preview"
-                                            style={{
-                                                background: item.preview,
-                                                borderRadius: 4,
-                                                width: '100%',
-                                                height: 40
-                                            }}
-                                        />
-                                        <span className="template-name">{item.name}</span>
-                                    </div>
-                                ))}
+                            <div
+                                className="template-category-header"
+                                onClick={() => setExpandedCategory(expandedCategory === key ? null : key)}
+                            >
+                                <span className={`category-arrow ${expandedCategory === key ? 'expanded' : ''}`}>▶</span>
+                                <h3 className="template-category-title">{category.name}</h3>
                             </div>
+
+                            {expandedCategory === key && (
+                                <div className="shapes-list">
+                                    {category.items.map((item) => (
+                                        <div
+                                            key={item.id}
+                                            className="shape-item template-item"
+                                            onClick={() => addTemplateToCanvas(item.elements)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <div
+                                                className="shape-preview"
+                                                style={{
+                                                    background: item.preview,
+                                                    borderRadius: 4,
+                                                    width: '100%',
+                                                    height: 40
+                                                }}
+                                            />
+                                            <span className="template-name">{item.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

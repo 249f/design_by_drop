@@ -46,14 +46,40 @@
 }
 
 .template-category {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+}
+
+.template-category-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.template-category-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.category-arrow {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.category-arrow.expanded {
+  transform: rotate(90deg);
 }
 
 .template-category-title {
   font-size: 0.75rem;
   color: var(--text-secondary);
-  margin-bottom: 8px;
-  padding-left: 4px;
+  margin: 0;
+  padding-left: 0;
+  user-select: none;
 }
 
 .template-item {
