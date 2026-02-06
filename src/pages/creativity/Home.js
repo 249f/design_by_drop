@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
 import { Save } from 'lucide-react';
-import { templates } from '../../components/templates';
+// import { templates } from '../../components/templates';
 
 // Basic shape components
 const shapes = [
@@ -58,7 +58,7 @@ function Home() {
     const [canvasHeight, setCanvasHeight] = useState(savedState?.canvasHeight || 800);
     const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
-    const [expandedCategory, setExpandedCategory] = useState(null);
+    // const [expandedCategory, setExpandedCategory] = useState(null);
 
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
@@ -301,17 +301,17 @@ function Home() {
     };
 
     // Add template to canvas
-    const addTemplateToCanvas = (templateElements) => {
-        if (!templateElements || !Array.isArray(templateElements)) return;
+    // const addTemplateToCanvas = (templateElements) => {
+    //     if (!templateElements || !Array.isArray(templateElements)) return;
 
-        // Clone elements to avoid reference issues
-        const newElements = templateElements.map(el => ({
-            ...el,
-            id: el.id + '_' + Date.now() + '_' + Math.floor(Math.random() * 1000) // Ensure unique IDs
-        }));
+    //     // Clone elements to avoid reference issues
+    //     const newElements = templateElements.map(el => ({
+    //         ...el,
+    //         id: el.id + '_' + Date.now() + '_' + Math.floor(Math.random() * 1000) // Ensure unique IDs
+    //     }));
 
-        setElements(prev => [...prev, ...newElements]);
-    };
+    //     setElements(prev => [...prev, ...newElements]);
+    // };
 
     // Handle element selection
     const handleElementClick = (e, element) => {
@@ -702,7 +702,7 @@ ${generateHTML()}
             {/* Left Sidebar */}
             <aside className="sidebar">
                 {/* Ready Elements (Templates) */}
-                <div className="sidebar-section">
+                {/* <div className="sidebar-section">
                     <h2 className="sidebar-title">Ready Elements</h2>
                     {Object.entries(templates).map(([key, category]) => (
                         <div key={key} className="template-category">
@@ -739,7 +739,7 @@ ${generateHTML()}
                             )}
                         </div>
                     ))}
-                </div>
+                </div> */}
 
                 {/* Elements */}
                 <div className="sidebar-section">
