@@ -1107,3 +1107,17 @@ button:disabled {
 .spin {
   animation: spin 1s linear infinite;
 }
+
+.ai-btn {
+  padding: 10px 16px;
+  /* background: isEnhancing ? '#4b5563' : 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)'; */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  /* cursor: isEnhancing ? 'not-allowed' : 'pointer'; */
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -1345,21 +1345,14 @@ ${enhancedCode.html}
                             onClick={enhanceWithAI}
                             disabled={isEnhancing}
                             style={{
-                                padding: '10px 16px',
-                                background: isEnhancing ? '#4b5563' : 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '6px',
+
+                                background: isEnhancing ? '#4b5563' : 'linear-gradient(135deg, #e400f9ff 0%, #400062ff 100%)',
                                 cursor: isEnhancing ? 'not-allowed' : 'pointer',
-                                fontSize: '0.9rem',
-                                fontWeight: '500',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px'
+
                             }}
                         >
                             {isEnhancing ? <Loader size={16} className="spin" /> : <Sparkles size={16} />}
-                            {isEnhancing ? 'Enhancing...' : 'AI'}
+                            {isEnhancing ? 'Enhancing... AI can make mistakes' : 'AI (Beta)'}
                         </button>
                         <button
                             className="download-btn"
@@ -1378,7 +1371,7 @@ ${enhancedCode.html}
                                 gap: '8px'
                             }}
                         >
-                            <Save size={16} /> Download as a HTML file
+                            <Save size={16} /> Download HTML file
                         </button>
                     </div>
                 </aside>
