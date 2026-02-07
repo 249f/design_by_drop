@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
-import { Save, Settings } from 'lucide-react';
+import { Save, Settings, Sparkles, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // import { templates } from '../../components/templates';
 
@@ -60,6 +60,10 @@ function Home() {
     const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
     // const [expandedCategory, setExpandedCategory] = useState(null);
+
+    // AI Enhancement state
+    const [isEnhancing, setIsEnhancing] = useState(false);
+    const [enhancedCode, setEnhancedCode] = useState(null); // { html: string, css: string }
 
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
@@ -595,6 +599,112 @@ ${generateHTML()}
         const a = document.createElement('a');
         a.href = url;
         a.download = 'design.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    // Enhance code with AI (using puter.js)
+    const enhanceWithAI = async () => {
+        if (elements.length === 0) {
+            alert('Add some elements to the canvas first!');
+            return;
+        }
+
+        setIsEnhancing(true);
+        setEnhancedCode(null);
+
+        const currentHTML = generateHTML();
+        const currentCSS = generateCSS();
+
+        const prompt = `You are an expert frontend developer. I have HTML and CSS code that uses "position: absolute" for layout. Convert it to a clean, responsive layout using flexbox or CSS grid.
+IMPORTANT:
+the code you getting is from a visual website builder so the code isn't clean an it's just elements stacked on top of each other.
+deeply analyze the original design and try to recreate it as close as possible, elements should be nested in a way that it matches the original design. when you see elements stacking on top of each other, that means they are inside each other. 
+CRITICAL REQUIREMENTS:
+1. The visual appearance MUST remain EXACTLY the same as the original design
+2. Replace "position: absolute" with flexbox/grid layouts
+3. Use proper semantic nesting of divs where needed
+4. Add responsive breakpoints using media queries for tablet (768px) and mobile (480px)
+5. Keep all colors, sizes, fonts, and spacing as close to the original as possible
+6. Use relative units (%, rem, em) where appropriate for responsiveness
+
+ORIGINAL HTML:
+\`\`\`html
+${currentHTML}
+\`\`\`
+
+ORIGINAL CSS:
+\`\`\`css
+${currentCSS}
+\`\`\`
+
+Return ONLY the enhanced code in this exact format (no explanations):
+---HTML---
+(your enhanced HTML here)
+---CSS---
+(your enhanced CSS here)
+---END---`;
+
+        try {
+            // Use puter.js AI chat
+            const response = await window.puter.ai.chat(prompt);
+            const responseText = response?.message?.content || response;
+
+            // Parse the response
+            const htmlMatch = responseText.match(/---HTML---([\s\S]*?)---CSS---/);
+            const cssMatch = responseText.match(/---CSS---([\s\S]*?)---END---/);
+
+            if (htmlMatch && cssMatch) {
+                setEnhancedCode({
+                    html: htmlMatch[1].trim(),
+                    css: cssMatch[1].trim()
+                });
+            } else {
+                // Fallback: try to extract code blocks
+                const codeBlocks = responseText.match(/```(?:html|css)?\s*([\s\S]*?)```/g);
+                if (codeBlocks && codeBlocks.length >= 2) {
+                    setEnhancedCode({
+                        html: codeBlocks[0].replace(/```(?:html)?\s*/, '').replace(/```$/, '').trim(),
+                        css: codeBlocks[1].replace(/```(?:css)?\s*/, '').replace(/```$/, '').trim()
+                    });
+                } else {
+                    alert('Could not parse AI response. Please try again.');
+                }
+            }
+        } catch (error) {
+            console.error('AI Enhancement error:', error);
+            alert('Failed to enhance code with AI. Please try again.');
+        } finally {
+            setIsEnhancing(false);
+        }
+    };
+
+    // Download enhanced HTML file
+    const downloadEnhancedHTML = () => {
+        if (!enhancedCode) return;
+
+        const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design by Drop Export (Responsive)</title>
+    <style>
+${enhancedCode.css}
+    </style>
+</head>
+<body>
+${enhancedCode.html}
+</body>
+</html>`;
+
+        const blob = new Blob([fullHTML], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'design-responsive.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1207,32 +1317,53 @@ ${generateHTML()}
                     </div>
                     <div className="code-section">
                         <div className="code-header">
-                            <h3>HTML</h3>
-                            <button className="copy-btn" onClick={() => copyToClipboard(generateHTML())}>
+                            <h3>HTML {enhancedCode && <span style={{ color: '#22c55e', fontSize: '0.75rem' }}>(Enhanced)</span>}</h3>
+                            <button className="copy-btn" onClick={() => copyToClipboard(enhancedCode ? enhancedCode.html : generateHTML())}>
                                 Copy
                             </button>
                         </div>
                         <pre className="code-output">
-                            <code>{generateHTML()}</code>
+                            <code>{enhancedCode ? enhancedCode.html : generateHTML()}</code>
                         </pre>
                     </div>
 
                     <div className="code-section">
                         <div className="code-header">
-                            <h3>CSS</h3>
-                            <button className="copy-btn" onClick={() => copyToClipboard(generateCSS())}>
+                            <h3>CSS {enhancedCode && <span style={{ color: '#22c55e', fontSize: '0.75rem' }}>(Enhanced)</span>}</h3>
+                            <button className="copy-btn" onClick={() => copyToClipboard(enhancedCode ? enhancedCode.css : generateCSS())}>
                                 Copy
                             </button>
                         </div>
                         <pre className="code-output">
-                            <code>{generateCSS()}</code>
+                            <code>{enhancedCode ? enhancedCode.css : generateCSS()}</code>
                         </pre>
                     </div>
 
-                    <div className="code-actions" style={{ marginTop: 'auto', paddingTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className="code-actions" style={{ marginTop: 'auto', paddingTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                        <button
+                            className="ai-btn"
+                            onClick={enhanceWithAI}
+                            disabled={isEnhancing}
+                            style={{
+                                padding: '10px 16px',
+                                background: isEnhancing ? '#4b5563' : 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '6px',
+                                cursor: isEnhancing ? 'not-allowed' : 'pointer',
+                                fontSize: '0.9rem',
+                                fontWeight: '500',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px'
+                            }}
+                        >
+                            {isEnhancing ? <Loader size={16} className="spin" /> : <Sparkles size={16} />}
+                            {isEnhancing ? 'Enhancing...' : 'AI'}
+                        </button>
                         <button
                             className="download-btn"
-                            onClick={downloadHTML}
+                            onClick={enhancedCode ? downloadEnhancedHTML : downloadHTML}
                             style={{
                                 padding: '10px 16px',
                                 background: '#8e00b1',
