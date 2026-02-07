@@ -65,6 +65,14 @@ function Home() {
     const [isEnhancing, setIsEnhancing] = useState(false);
     const [enhancedCode, setEnhancedCode] = useState(null); // { html: string, css: string }
 
+    // Clear enhanced code on workspace changes
+    useEffect(() => {
+        if (enhancedCode) {
+            setEnhancedCode(null);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [elements, canvasBackground, canvasHeight]);
+
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
 
@@ -572,6 +580,7 @@ function Home() {
             setCanvasBackground('#ffffff');
             setCanvasHeight(800);
             setResponsiveStyles({ desktop: {}, tablet: {}, mobile: {} });
+            setEnhancedCode(null);
             setSelectedElement(null);
             elementIdRef.current = 1;
         }
