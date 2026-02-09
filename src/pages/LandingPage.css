@@ -4,7 +4,7 @@
     --lp-primary-light: #b03cdb;
     --lp-accent: #f0abfc;
     /* Soft pink/purple accent */
-    --lp-bg: #0f0a14;
+    --lp-bg: #101010;
     --lp-bg-secondary: #1a1125;
     --lp-text: #ffffff;
     --lp-text-muted: #a1a1aa;
@@ -40,23 +40,20 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 4rem;
-    background: rgba(15, 10, 20, 0.8);
+    background: rgba(17, 17, 17, 0.8);
     backdrop-filter: blur(10px);
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
 }
 
 .lp-logo {
     font-size: 1.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--lp-accent), var(--lp-primary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: rgb(232, 232, 232);
     letter-spacing: -1px;
 }
 
