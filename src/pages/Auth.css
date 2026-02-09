@@ -3,36 +3,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--lp-bg);
+    background-color: black;
     padding: 2rem;
     position: relative;
     overflow: hidden;
 }
 
-/* Background Effect similar to Landing Page */
-.auth-container::before {
-    content: '';
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(142, 0, 177, 0.15) 0%, rgba(15, 10, 20, 0) 70%);
-    top: -100px;
-    left: -100px;
-    border-radius: 50%;
-    z-index: 0;
-}
 
-.auth-container::after {
-    content: '';
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(240, 171, 252, 0.1) 0%, rgba(15, 10, 20, 0) 70%);
-    bottom: -100px;
-    right: -100px;
-    border-radius: 50%;
-    z-index: 0;
-}
+
 
 .auth-card {
     background: rgba(255, 255, 255, 0.03);
@@ -48,8 +26,15 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .auth-title {
