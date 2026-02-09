@@ -1,10 +1,10 @@
 :root {
-    --lp-primary: #8e00b1;
-    --lp-primary-dark: #6a0085;
-    --lp-primary-light: #b03cdb;
-    --lp-accent: #f0abfc;
+    --lp-primary: #1d1d1d;
+    --lp-primary-dark: #020003;
+    --lp-primary-light: #161616;
+    --lp-accent: #eaeaea;
     /* Soft pink/purple accent */
-    --lp-bg: #0f0a14;
+    --lp-bg: #101010;
     --lp-bg-secondary: #1a1125;
     --lp-text: #ffffff;
     --lp-text-muted: #a1a1aa;
@@ -40,23 +40,20 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 4rem;
-    background: rgba(15, 10, 20, 0.8);
+    background: rgba(17, 17, 17, 0.8);
     backdrop-filter: blur(10px);
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
 }
 
 .lp-logo {
     font-size: 1.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--lp-accent), var(--lp-primary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: rgb(232, 232, 232);
     letter-spacing: -1px;
 }
 
@@ -84,7 +81,8 @@ body {
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(142, 0, 177, 0.4);
+    border: 1px solid whitesmoke;
+    /* box-shadow: 0 4px 15px rgba(142, 0, 177, 0.4); */
 }
 
 .lp-btn-primary:hover {
@@ -319,7 +317,7 @@ body {
     font-size: 1.5rem;
     font-weight: 800;
     margin-bottom: 2rem;
-    background: rgba(142, 0, 177, 0.2);
+    background: rgba(0, 0, 0, 0.296);
     width: 60px;
     height: 60px;
     display: flex;
@@ -362,7 +360,7 @@ body {
     bottom: -1rem;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--lp-primary);
+    color: rgb(237, 237, 237);
     animation: bounce 1.5s infinite;
     font-size: 50px;
     transition: color 0.3s;

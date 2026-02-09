@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
-import { Github, Instagram, Linkedin, Facebook, MousePointer, Code, Save, Lock, Zap, Tablet, Download } from 'lucide-react';
+import { Github, Instagram, Linkedin, Facebook, MousePointer, Code, Lock, Zap, Tablet, Download, LucideCloud } from 'lucide-react';
 import heroVideo from '../assets/video/heroVideo.webm';
 
 const LandingPage = () => {
@@ -79,9 +79,9 @@ const LandingPage = () => {
                     </div>
 
                     <div className="lp-card lp-card-save">
-                        <div className="lp-card-icon"><Save size={24} /></div>
-                        <h3>Auto-Save</h3>
-                        <p>Your work is automatically saved to your browser's local store.</p>
+                        <div className="lp-card-icon"><LucideCloud size={24} /></div>
+                        <h3>Cloud Save</h3>
+                        <p>Your work is saved on the cloud, giving you the abilities to accsess it from anywhere.</p>
                     </div>
 
                     <div className="lp-card lp-card-speed">

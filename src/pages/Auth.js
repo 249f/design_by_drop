@@ -61,7 +61,7 @@ const Auth = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
-                                placeholder="John Doe"
+                                placeholder="Your Name"
                             />
                         </div>
                     )}
