@@ -1,7 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
-import { Save, Settings } from 'lucide-react';
+import { Save, Settings, Sparkles, Loader, Cloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useProject } from '../../context/ProjectContext';
+import { useAuth } from '../../context/AuthContext';
 // import { templates } from '../../components/templates';
 
 // Basic shape components
@@ -60,6 +62,35 @@ function Home() {
     const [zoomLevel, setZoomLevel] = useState(0.5);
     const [showCodePanel, setShowCodePanel] = useState(false);
     // const [expandedCategory, setExpandedCategory] = useState(null);
+
+    const { user } = useAuth();
+    const { saveProject, currentProject, loadProject, projects, loading: projectLoading } = useProject();
+    const [showProjectModal, setShowProjectModal] = useState(false);
+    const [projectName, setProjectName] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Load initial state from localStorage or Current Project
+    useEffect(() => {
+        if (currentProject) {
+            setElements(currentProject.elements || []);
+            setCanvasBackground(currentProject.canvasBackground || '#ffffff');
+            setCanvasHeight(currentProject.canvasHeight || 800);
+            setResponsiveStyles(currentProject.responsiveStyles || { desktop: {}, tablet: {}, mobile: {} });
+            setProjectName(currentProject.name || '');
+        }
+    }, [currentProject]);
+
+    // Enhanced code state
+    const [isEnhancing, setIsEnhancing] = useState(false);
+    const [enhancedCode, setEnhancedCode] = useState(null); // { html: string, css: string }
+
+    // Clear enhanced code on workspace changes
+    useEffect(() => {
+        if (enhancedCode) {
+            setEnhancedCode(null);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [elements, canvasBackground, canvasHeight]);
 
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
@@ -568,6 +599,7 @@ function Home() {
             setCanvasBackground('#ffffff');
             setCanvasHeight(800);
             setResponsiveStyles({ desktop: {}, tablet: {}, mobile: {} });
+            setEnhancedCode(null);
             setSelectedElement(null);
             elementIdRef.current = 1;
         }
@@ -595,6 +627,150 @@ ${generateHTML()}
         const a = document.createElement('a');
         a.href = url;
         a.download = 'design.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    // Save Project to Cloud
+    const handleSaveProject = async () => {
+        if (!user) {
+            alert('Please login to save your project');
+            return;
+        }
+
+        if (!projectName.trim()) {
+            alert('Please enter a project name');
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const projectData = {
+                elements,
+                canvasBackground,
+                canvasHeight,
+                responsiveStyles,
+                activeScreen,
+                customSize,
+                // Add any other state you want to save
+            };
+
+            // Generate thumbnail (optional - for now just skip or use a placeholder if needed by logic)
+            // For now we just save data
+
+            await saveProject(projectData, projectName);
+            alert('Project saved successfully!');
+            setShowProjectModal(false);
+        } catch (error) {
+            console.error('Failed to save project:', error);
+            alert('Failed to save project: ' + error.message);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    // Enhance code with AI (using puter.js)
+    const enhanceWithAI = async () => {
+        if (elements.length === 0) {
+            alert('Add some elements to the canvas first!');
+            return;
+        }
+
+        setIsEnhancing(true);
+        setEnhancedCode(null);
+
+        const currentHTML = generateHTML();
+        const currentCSS = generateCSS();
+
+        const prompt = `You are an expert frontend developer. I have HTML and CSS code that uses "position: absolute" for layout. Convert it to a clean, responsive layout using flexbox or CSS grid.
+IMPORTANT:
+the code you getting is from a visual website builder so the code isn't clean an it's just elements stacked on top of each other.
+deeply analyze the original design and try to recreate it as close as possible, elements should be nested in a way that it matches the original design. when you see elements stacking on top of each other, that means they are inside each other. 
+CRITICAL REQUIREMENTS:
+1. The visual appearance MUST remain EXACTLY the same as the original design
+2. Replace "position: absolute" with flexbox/grid layouts
+3. Use proper semantic nesting of divs where needed
+4. Add responsive breakpoints using media queries for tablet (768px) and mobile (480px)
+5. Keep all colors, sizes, fonts, and spacing as close to the original as possible
+6. Use relative units (%, rem, em) where appropriate for responsiveness
+
+ORIGINAL HTML:
+\`\`\`html
+${currentHTML}
+\`\`\`
+
+ORIGINAL CSS:
+\`\`\`css
+${currentCSS}
+\`\`\`
+
+Return ONLY the enhanced code in this exact format (no explanations):
+---HTML---
+(your enhanced HTML here)
+---CSS---
+(your enhanced CSS here)
+---END---`;
+
+        try {
+            // Use puter.js AI chat
+            const response = await window.puter.ai.chat(prompt);
+            const responseText = response?.message?.content || response;
+
+            // Parse the response
+            const htmlMatch = responseText.match(/---HTML---([\s\S]*?)---CSS---/);
+            const cssMatch = responseText.match(/---CSS---([\s\S]*?)---END---/);
+
+            if (htmlMatch && cssMatch) {
+                setEnhancedCode({
+                    html: htmlMatch[1].trim(),
+                    css: cssMatch[1].trim()
+                });
+            } else {
+                // Fallback: try to extract code blocks
+                const codeBlocks = responseText.match(/```(?:html|css)?\s*([\s\S]*?)```/g);
+                if (codeBlocks && codeBlocks.length >= 2) {
+                    setEnhancedCode({
+                        html: codeBlocks[0].replace(/```(?:html)?\s*/, '').replace(/```$/, '').trim(),
+                        css: codeBlocks[1].replace(/```(?:css)?\s*/, '').replace(/```$/, '').trim()
+                    });
+                } else {
+                    alert('Could not parse AI response. Please try again.');
+                }
+            }
+        } catch (error) {
+            console.error('AI Enhancement error:', error);
+            alert('Failed to enhance code with AI. Please try again.');
+        } finally {
+            setIsEnhancing(false);
+        }
+    };
+
+    // Download enhanced HTML file
+    const downloadEnhancedHTML = () => {
+        if (!enhancedCode) return;
+
+        const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design by Drop Export (Responsive)</title>
+    <style>
+${enhancedCode.css}
+    </style>
+</head>
+<body>
+${enhancedCode.html}
+</body>
+</html>`;
+
+        const blob = new Blob([fullHTML], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'design-responsive.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1140,13 +1316,22 @@ ${generateHTML()}
                     >
                         {showCodePanel ? '✕ Hide Code' : '{ } See Code'}
                     </button>
+
+                    <button
+                        className="settings-btn"
+                        onClick={() => setShowProjectModal(true)}
+                        title="Save Project"
+                        style={{ marginRight: '8px' }}
+                    >
+                        <Save size={20} />
+                    </button>
+
                     <button
                         className="settings-btn"
                         onClick={() => navigate('/creativity/settings')}
-
                         title="Settings"
                     >
-                        <Settings size={25} />
+                        <Settings size={20} />
                     </button>
                 </div>
 
@@ -1207,32 +1392,44 @@ ${generateHTML()}
                     </div>
                     <div className="code-section">
                         <div className="code-header">
-                            <h3>HTML</h3>
-                            <button className="copy-btn" onClick={() => copyToClipboard(generateHTML())}>
+                            <h3>HTML {enhancedCode && <span style={{ color: '#22c55e', fontSize: '0.75rem' }}>(Enhanced)</span>}</h3>
+                            <button className="copy-btn" onClick={() => copyToClipboard(enhancedCode ? enhancedCode.html : generateHTML())}>
                                 Copy
                             </button>
                         </div>
                         <pre className="code-output">
-                            <code>{generateHTML()}</code>
+                            <code>{enhancedCode ? enhancedCode.html : generateHTML()}</code>
                         </pre>
                     </div>
 
                     <div className="code-section">
                         <div className="code-header">
-                            <h3>CSS</h3>
-                            <button className="copy-btn" onClick={() => copyToClipboard(generateCSS())}>
+                            <h3>CSS {enhancedCode && <span style={{ color: '#22c55e', fontSize: '0.75rem' }}>(Enhanced)</span>}</h3>
+                            <button className="copy-btn" onClick={() => copyToClipboard(enhancedCode ? enhancedCode.css : generateCSS())}>
                                 Copy
                             </button>
                         </div>
                         <pre className="code-output">
-                            <code>{generateCSS()}</code>
+                            <code>{enhancedCode ? enhancedCode.css : generateCSS()}</code>
                         </pre>
                     </div>
 
-                    <div className="code-actions" style={{ marginTop: 'auto', paddingTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className="code-actions" style={{ marginTop: 'auto', paddingTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                        <button
+                            className="ai-btn"
+                            onClick={enhanceWithAI}
+                            disabled={isEnhancing}
+                            style={{
+                                background: isEnhancing ? '#4b5563' : 'linear-gradient(135deg, #e400f9ff 0%, #400062ff 100%)',
+                                cursor: isEnhancing ? 'not-allowed' : 'pointer',
+                            }}
+                        >
+                            {isEnhancing ? <Loader size={16} className="spin" /> : <Sparkles size={16} />}
+                            {isEnhancing ? 'Enhancing... AI can make mistakes' : 'AI (Beta)'}
+                        </button>
                         <button
                             className="download-btn"
-                            onClick={downloadHTML}
+                            onClick={enhancedCode ? downloadEnhancedHTML : downloadHTML}
                             style={{
                                 padding: '10px 16px',
                                 background: '#8e00b1',
@@ -1247,10 +1444,89 @@ ${generateHTML()}
                                 gap: '8px'
                             }}
                         >
-                            <Save size={16} /> Download as a HTML file
+                            <Save size={16} /> Download HTML file
                         </button>
                     </div>
                 </aside>
+            )}
+
+            {/* Project Modal */}
+            {showProjectModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>Save Project</h2>
+                            <button className="close-modal-btn" onClick={() => setShowProjectModal(false)}>✕</button>
+                        </div>
+                        <div className="modal-body">
+                            <label>Project Name</label>
+                            <input
+                                type="text"
+                                value={projectName}
+                                onChange={(e) => setProjectName(e.target.value)}
+                                placeholder="Enter project name..."
+                                className="project-name-input"
+                            />
+
+                            <div className="project-actions">
+                                <button
+                                    className="save-project-btn"
+                                    onClick={handleSaveProject}
+                                    disabled={isSaving}
+                                >
+                                    {isSaving ? (
+                                        <>
+                                            <Loader size={16} className="spin" />
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Cloud size={16} />
+                                            Save to Cloud
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
+                            <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #eee' }} />
+
+                            <h3>My Projects</h3>
+                            <div className="projects-list">
+                                {projectLoading ? (
+                                    <div className="loading-projects">
+                                        <Loader size={24} className="spin" />
+                                        <p>Loading projects...</p>
+                                    </div>
+                                ) : projects.length === 0 ? (
+                                    <p className="no-projects">No saved projects yet.</p>
+                                ) : (
+                                    projects.map(project => (
+                                        <div key={project.$id} className="project-item">
+                                            <span className="project-name">{project.name}</span>
+                                            <div className="project-item-actions">
+                                                <button
+                                                    className="load-btn"
+                                                    onClick={async () => {
+                                                        try {
+                                                            await loadProject(project.$id);
+                                                            setShowProjectModal(false);
+                                                            alert('Project loaded!');
+                                                        } catch (e) {
+                                                            alert('Failed to load: ' + e.message);
+                                                        }
+                                                    }}
+                                                >
+                                                    Load
+                                                </button>
+                                                {/* Add Delete button if needed */}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
