@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { databases, storage, account } from '../lib/appwrite';
+import { databases, storage } from '../lib/appwrite';
 import { ID, Query } from 'appwrite';
 import { useAuth } from './AuthContext';
 
@@ -170,7 +170,6 @@ export const ProjectProvider = ({ children }) => {
             );
 
             // 2. Get File View (Download)
-            const fileUrl = storage.getFileView(BUCKET_ID, document.fileId);
 
             // Appwrite getFileView returns a URL. We need to fetch the content.
             // However, getFileView returns an image preview usually. 

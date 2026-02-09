@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
-import { Save, Settings, Sparkles, Loader, Folder, Cloud } from 'lucide-react';
+import { Save, Settings, Sparkles, Loader, Cloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useProject } from '../../context/ProjectContext';
 import { useAuth } from '../../context/AuthContext';
@@ -64,7 +64,7 @@ function Home() {
     // const [expandedCategory, setExpandedCategory] = useState(null);
 
     const { user } = useAuth();
-    const { saveProject, currentProject, loadProject, projects, fetchProjects, loading: projectLoading } = useProject();
+    const { saveProject, currentProject, loadProject, projects, loading: projectLoading } = useProject();
     const [showProjectModal, setShowProjectModal] = useState(false);
     const [projectName, setProjectName] = useState('');
     const [isSaving, setIsSaving] = useState(false);
