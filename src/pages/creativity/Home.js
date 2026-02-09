@@ -1,7 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './Home.css';
-import { Save, Settings, Sparkles, Loader } from 'lucide-react';
+import { Save, Settings, Sparkles, Loader, Folder, Cloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useProject } from '../../context/ProjectContext';
+import { useAuth } from '../../context/AuthContext';
 // import { templates } from '../../components/templates';
 
 // Basic shape components
@@ -61,7 +63,24 @@ function Home() {
     const [showCodePanel, setShowCodePanel] = useState(false);
     // const [expandedCategory, setExpandedCategory] = useState(null);
 
-    // AI Enhancement state
+    const { user } = useAuth();
+    const { saveProject, currentProject, loadProject, projects, fetchProjects, loading: projectLoading } = useProject();
+    const [showProjectModal, setShowProjectModal] = useState(false);
+    const [projectName, setProjectName] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Load initial state from localStorage or Current Project
+    useEffect(() => {
+        if (currentProject) {
+            setElements(currentProject.elements || []);
+            setCanvasBackground(currentProject.canvasBackground || '#ffffff');
+            setCanvasHeight(currentProject.canvasHeight || 800);
+            setResponsiveStyles(currentProject.responsiveStyles || { desktop: {}, tablet: {}, mobile: {} });
+            setProjectName(currentProject.name || '');
+        }
+    }, [currentProject]);
+
+    // Enhanced code state
     const [isEnhancing, setIsEnhancing] = useState(false);
     const [enhancedCode, setEnhancedCode] = useState(null); // { html: string, css: string }
 
@@ -612,6 +631,44 @@ ${generateHTML()}
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    };
+
+    // Save Project to Cloud
+    const handleSaveProject = async () => {
+        if (!user) {
+            alert('Please login to save your project');
+            return;
+        }
+
+        if (!projectName.trim()) {
+            alert('Please enter a project name');
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const projectData = {
+                elements,
+                canvasBackground,
+                canvasHeight,
+                responsiveStyles,
+                activeScreen,
+                customSize,
+                // Add any other state you want to save
+            };
+
+            // Generate thumbnail (optional - for now just skip or use a placeholder if needed by logic)
+            // For now we just save data
+
+            await saveProject(projectData, projectName);
+            alert('Project saved successfully!');
+            setShowProjectModal(false);
+        } catch (error) {
+            console.error('Failed to save project:', error);
+            alert('Failed to save project: ' + error.message);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     // Enhance code with AI (using puter.js)
@@ -1259,13 +1316,22 @@ ${enhancedCode.html}
                     >
                         {showCodePanel ? '✕ Hide Code' : '{ } See Code'}
                     </button>
+
+                    <button
+                        className="settings-btn"
+                        onClick={() => setShowProjectModal(true)}
+                        title="Save Project"
+                        style={{ marginRight: '8px' }}
+                    >
+                        <Save size={20} />
+                    </button>
+
                     <button
                         className="settings-btn"
                         onClick={() => navigate('/creativity/settings')}
-
                         title="Settings"
                     >
-                        <Settings size={25} />
+                        <Settings size={20} />
                     </button>
                 </div>
 
@@ -1354,10 +1420,8 @@ ${enhancedCode.html}
                             onClick={enhanceWithAI}
                             disabled={isEnhancing}
                             style={{
-
                                 background: isEnhancing ? '#4b5563' : 'linear-gradient(135deg, #e400f9ff 0%, #400062ff 100%)',
                                 cursor: isEnhancing ? 'not-allowed' : 'pointer',
-
                             }}
                         >
                             {isEnhancing ? <Loader size={16} className="spin" /> : <Sparkles size={16} />}
@@ -1384,6 +1448,85 @@ ${enhancedCode.html}
                         </button>
                     </div>
                 </aside>
+            )}
+
+            {/* Project Modal */}
+            {showProjectModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>Save Project</h2>
+                            <button className="close-modal-btn" onClick={() => setShowProjectModal(false)}>✕</button>
+                        </div>
+                        <div className="modal-body">
+                            <label>Project Name</label>
+                            <input
+                                type="text"
+                                value={projectName}
+                                onChange={(e) => setProjectName(e.target.value)}
+                                placeholder="Enter project name..."
+                                className="project-name-input"
+                            />
+
+                            <div className="project-actions">
+                                <button
+                                    className="save-project-btn"
+                                    onClick={handleSaveProject}
+                                    disabled={isSaving}
+                                >
+                                    {isSaving ? (
+                                        <>
+                                            <Loader size={16} className="spin" />
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Cloud size={16} />
+                                            Save to Cloud
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
+                            <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #eee' }} />
+
+                            <h3>My Projects</h3>
+                            <div className="projects-list">
+                                {projectLoading ? (
+                                    <div className="loading-projects">
+                                        <Loader size={24} className="spin" />
+                                        <p>Loading projects...</p>
+                                    </div>
+                                ) : projects.length === 0 ? (
+                                    <p className="no-projects">No saved projects yet.</p>
+                                ) : (
+                                    projects.map(project => (
+                                        <div key={project.$id} className="project-item">
+                                            <span className="project-name">{project.name}</span>
+                                            <div className="project-item-actions">
+                                                <button
+                                                    className="load-btn"
+                                                    onClick={async () => {
+                                                        try {
+                                                            await loadProject(project.$id);
+                                                            setShowProjectModal(false);
+                                                            alert('Project loaded!');
+                                                        } catch (e) {
+                                                            alert('Failed to load: ' + e.message);
+                                                        }
+                                                    }}
+                                                >
+                                                    Load
+                                                </button>
+                                                {/* Add Delete button if needed */}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
