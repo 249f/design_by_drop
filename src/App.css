@@ -14,3 +14,19 @@ body,
   width: 100%;
   min-height: 100vh;
 }
+
+html:root {
+  --lp-primary: #00f2ff;
+  /* Cyan Neon */
+  --lp-primary-dark: #008891;
+  --lp-primary-light: #60fbff;
+  --lp-accent: #00f2ff;
+  --lp-bg: #000000;
+  --lp-bg-secondary: #050505;
+  --lp-bg-card: rgba(255, 255, 255, 0.02);
+  --lp-text: #ffffff;
+  --lp-text-muted: #888888;
+  --lp-border: rgba(0, 242, 255, 0.1);
+  --lp-border-active: rgba(0, 242, 255, 0.4);
+  --lp-glow: rgba(0, 242, 255, 0.15);
+}

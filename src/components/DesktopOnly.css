@@ -1,7 +1,7 @@
 .do-overlay {
     position: fixed;
     inset: 0;
-    background: #0f0a14;
+    background: var(--lp-bg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -19,15 +19,15 @@
 .do-icon {
     width: 120px;
     height: 120px;
-    background: rgba(142, 0, 177, 0.1);
-    border: 1px solid rgba(142, 0, 177, 0.2);
-    border-radius: 30px;
+    background: var(--lp-bg-card);
+    border: 1px solid var(--lp-border);
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #f0abfc;
+    color: var(--lp-primary);
     margin: 0 auto 2.5rem;
-    box-shadow: 0 0 40px rgba(142, 0, 177, 0.1);
+    box-shadow: 0 0 40px var(--lp-glow);
 }
 
 .do-title {
@@ -35,12 +35,13 @@
     font-weight: 800;
     margin-bottom: 1.5rem;
     color: white;
-    letter-spacing: -1px;
+    letter-spacing: -2px;
+    text-transform: uppercase;
 }
 
 .do-message {
     font-size: 1.1rem;
-    color: #a1a1aa;
+    color: var(--lp-text-muted);
     line-height: 1.6;
     margin-bottom: 3rem;
 }
@@ -52,17 +53,21 @@
     color: white;
     text-decoration: none;
     font-weight: 600;
-    background: #8e00b1;
+    background: transparent;
     padding: 1rem 2rem;
-    border-radius: 99px;
+    border-radius: 4px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(142, 0, 177, 0.4);
+    border: 1px solid var(--lp-primary);
+    box-shadow: 0 0 10px var(--lp-glow);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
 }
 
 .do-back-link:hover {
-    background: #b03cdb;
+    background: var(--lp-primary);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(142, 0, 177, 0.6);
+    box-shadow: 0 8px 25px var(--lp-glow);
 }
 
 @keyframes fadeInUp {
