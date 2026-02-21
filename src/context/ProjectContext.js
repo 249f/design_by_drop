@@ -169,16 +169,22 @@ export const ProjectProvider = ({ children }) => {
                 projectId
             );
 
-            // 2. Get File View (Download)
-
-            // Appwrite getFileView returns a URL. We need to fetch the content.
-            // However, getFileView returns an image preview usually. 
-            // For JSON data, we should use getFileDownload.
-
+            // 2. Download file content
+            // Appwrite SDK's getFileDownload only returns a URL — we must fetch it ourselves.
+            // We need credentials: 'include' so the browser sends the session cookie,
+            // otherwise Appwrite returns 404 (permission denied).
             const downloadUrl = storage.getFileDownload(BUCKET_ID, document.fileId);
 
-            const response = await fetch(downloadUrl);
-            if (!response.ok) throw new Error('Failed to download project file');
+            const response = await fetch(downloadUrl, {
+                credentials: 'include',
+                headers: {
+                    'X-Appwrite-Project': process.env.REACT_APP_APPWRITE_PROJECT_ID,
+                },
+            });
+            if (!response.ok) {
+                console.error('Download response:', response.status, response.statusText);
+                throw new Error('Failed to download project file');
+            }
 
             const projectData = await response.json();
 
