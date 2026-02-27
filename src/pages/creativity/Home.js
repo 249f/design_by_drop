@@ -92,6 +92,7 @@ function Home() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [elements, canvasBackground, canvasHeight]);
 
+    const [showAIConfirmation, setShowAIConfirmation] = useState(false);
     const [showAlignmentHelpers, setShowAlignmentHelpers] = useState(true);
     const [alignmentLines, setAlignmentLines] = useState([]);
 
@@ -671,15 +672,20 @@ ${generateHTML()}
         }
     };
 
-    // Enhance code with AI (using puter.js)
-    const enhanceWithAI = async () => {
+    // Handle AI Button Click with Confirmation
+    const handleAIButtonClick = () => {
         if (elements.length === 0) {
             alert('Add some elements to the canvas first!');
             return;
         }
+        setShowAIConfirmation(true);
+    };
 
+    // Enhance code with AI (using puter.js)
+    const enhanceWithAI = async () => {
         setIsEnhancing(true);
         setEnhancedCode(null);
+        setShowAIConfirmation(false);
 
         const currentHTML = generateHTML();
         const currentCSS = generateCSS();
@@ -1417,7 +1423,7 @@ ${enhancedCode.html}
                     <div className="code-actions" style={{ marginTop: 'auto', paddingTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                         <button
                             className="ai-btn"
-                            onClick={enhanceWithAI}
+                            onClick={handleAIButtonClick}
                             disabled={isEnhancing}
                             style={{
                                 background: isEnhancing ? '#4b5563' : 'linear-gradient(135deg, #e400f9ff 0%, #400062ff 100%)',
@@ -1523,6 +1529,40 @@ ${enhancedCode.html}
                                         </div>
                                     ))
                                 )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* AI Confirmation Modal */}
+            {showAIConfirmation && (
+                <div className="modal-overlay">
+                    <div className="modal-content ai-confirmation-modal">
+                        <div className="modal-header">
+                            <h2>Please attention :</h2>
+                            <button className="close-modal-btn" onClick={() => setShowAIConfirmation(false)}>✕</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="ai-note-container">
+
+                                <p className="ai-note-text">
+                                    This feature is used to get a clean code and since AI can make mistakes, using this may effect the final design.
+                                </p>
+                            </div>
+                            <div className="modal-actions" style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+                                <button
+                                    className="confirm-ai-btn"
+                                    onClick={enhanceWithAI}
+                                >
+                                    Continue
+                                </button>
+                                <button
+                                    className="cancel-ai-btn"
+                                    onClick={() => setShowAIConfirmation(false)}
+                                >
+                                    Cancel
+                                </button>
                             </div>
                         </div>
                     </div>

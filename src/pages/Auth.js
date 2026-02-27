@@ -76,7 +76,7 @@ const Auth = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>Password {isLogin ? '' : '(At least 8 characters)'}</label>
                         <input
                             type="password"
                             value={password}
