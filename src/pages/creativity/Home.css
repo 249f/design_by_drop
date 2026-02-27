@@ -1281,3 +1281,27 @@ button:disabled {
   font-style: italic;
   padding: 20px;
 }
+
+.confirm-ai-btn {
+  padding: 8px 16px;
+  background: #8e00b1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.cancel-ai-btn {
+  padding: 8px 16px;
+  background: #a40000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
