@@ -1223,43 +1223,7 @@ ${enhancedCode.html}
             <main className="canvas-container">
                 {/* Toolbar */}
                 <div className="canvas-toolbar">
-                    {/* Screen Size Presets */}
-                    {/* Screen Size Presets - Commented out under development
-                    <div className="screen-presets">
-                        {screenPresets.map(preset => (
-                            <button
-                                key={preset.id}
-                                className={`preset-btn ${activeScreen === preset.id ? 'active' : ''}`}
-                                onClick={() => setActiveScreen(preset.id)}
-                                title={preset.mediaQuery || 'Custom size'}
-                            >
-                                {preset.name}
-                            </button>
-                        ))}
-                    </div>
 
-                    {activeScreen !== 'desktop' && activeScreen !== 'custom' && (
-                        <span className="responsive-indicator">
-                            Editing {activeScreen} styles
-                        </span>
-                    )}
-
-                    {activeScreen === 'custom' && (
-                        <div className="custom-size-inputs">
-                            <input
-                                type="number"
-                                value={customSize.width}
-                                onChange={(e) => setCustomSize(prev => ({ ...prev, width: parseInt(e.target.value) || 800 }))}
-                            />
-                            <span>×</span>
-                            <input
-                                type="number"
-                                value={customSize.height}
-                                onChange={(e) => setCustomSize(prev => ({ ...prev, height: parseInt(e.target.value) || 600 }))}
-                            />
-                        </div>
-                    )}
-                    */}
 
                     {/* Background Color */}
                     <div className="bg-color-control">
