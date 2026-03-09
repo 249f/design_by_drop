@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "appwrite-cli": {
+      "source": "appwrite/agent-skills",
+      "sourceType": "github",
+      "computedHash": "8943b6f41035246976fbd65c76ec9f9bf79fb4bb0fc898a9a6de00a4e41dd78c"
+    }
+  }
+}
